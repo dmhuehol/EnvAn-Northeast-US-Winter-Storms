@@ -42,7 +42,7 @@ function [sndng,filtered,soundsh,soundsWithDewRH,soundsWithHeight,goodfinal,warm
     %Version date: 4/21/2018
     %Last major revision: 4/21/2018
     %
-    %See also IGRAimpf, timefilter, levfilter, dewrelh, surfconfilter,
+    %See also importIGRAv1, timefilter, levfilter, dewrelh, surfconfilter,
     %nosedetect
     %
 
@@ -51,7 +51,7 @@ disp('Import started!')
     
 % Read soundings data into MATLAB
 try
-    [sndng] = IGRAimpf(input_file); %This produces a structure of soundings data with minimal quality control.
+    [sndng] = importIGRAv1(input_file); %This produces a structure of soundings data with minimal quality control.
 catch ME
     msg = 'Failed to create raw soundings structure! Check data file for errors and try again.';
     error(msg)
