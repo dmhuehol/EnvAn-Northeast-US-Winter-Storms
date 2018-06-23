@@ -38,9 +38,9 @@ findsnd: Find the index number corresponding to a particular date and time withi
 
 findTheCloud: Finds cloud layers within a sounding for a given time, outputting the upper and lower bounds for use by cloudplot. Uses threshold relative humidity values to locate cloud, which is known to be a relatively poor method of locating cloud. Will be resolved in Phase 3.
 
-fullIGRAimp: Imports IGRA v1 data and applies multiple processing methods from other functions, outputting a new sounding structure associated with each modification to the data structure. Requires IGRAimpf, timefilter, levfilter, addDewRH, dewrelh, surfconfilter, nosedetect, prestogeo, simple_prestogeo
+fullIGRAimp: Imports IGRA v1 data and applies multiple processing methods from other functions, outputting a new sounding structure associated with each modification to the data structure. Updated 6/23/2018 to reflect the renaming of IGRAimpf to importIGRAv1. Requires IGRAimpf, timefilter, levfilter, addDewRH, dewrelh, surfconfilter, nosedetect, prestogeo, simple_prestogeo
 
-IGRAimpf: Creates a structure of soundings data from raw Integrated Global Radiosonde Archive v1 .dat data. (Based on part of a script originally written by Megan Amanatides.)
+importIGRAv1: Creates a structure of soundings data from raw Integrated Global Radiosonde Archive v1 .dat data. Renamed from IGRAimpf on 6/23/2018. (Based on part of a script originally written by Megan Amanatides.)
 
 importIGRAv2: Imports IGRA v2 sounding data files into a MATLAB data structure.
 
