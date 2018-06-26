@@ -30,6 +30,7 @@ elseif nargin==1
 end
 
 dewpoint = temp - dpd; %Dewpoint is difference of temperature and dewpoint depression
+
 relative_humidity = 100*(exp((17.625*dewpoint)./(243.04+dewpoint))./exp((17.625*temp)./(243.04+temp))); %The August-Roche-Magnus equation, accurate to within 0.4% from -40C to 50C
 
 % Another way to calculate relative humidity, uncomment if you don't want ARM for some reason

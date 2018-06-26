@@ -37,7 +37,7 @@ switch type
         end
     case 'dew' %Add only dewpoint
         for scnt = 1:length(sounding)
-            [dew(scnt).dewpt,~] = dewrelh(sounding(scnt).temp,sounding(scnt).dew_point_dep); %dewrelh calculates dewpoint and relative humidity from dewpoint depression and temperature
+            [dew(scnt).dewpt] = dewFromRH(sounding(scnt).temp,sounding(scnt).rhum); %dewrelh calculates dewpoint and relative humidity from dewpoint depression and temperature
         end
 %Calculation will return NaN if temperature and/or dewpoint depression are NaNs.
 end

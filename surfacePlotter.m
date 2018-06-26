@@ -35,7 +35,7 @@
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
-    %Version date: 6/07/2018
+    %Version date: 6/26/2018
     %Last major revision: 11/13/2017
     %
     %tlabel written by Carlos Adrian Vargas Aguilera, last updated 9/2009,
@@ -109,12 +109,12 @@ figure; %Make new figure
 tempAndDew = plot(serialTimes,TdT); %Plot temperature and dewpoint in deg C
 set(tempAndDew,'LineWidth',2.3)
 ylim([minDegC-4 maxDegC+1]) %Set ylim according to max/min degree; the min limit is offset by -3 instead of -1 in order to make room for the wind barbs
-celsiusLabelHand = ylabel('deg C');
+celsiusLabelHand = ylabel([char(176) 'C']);
 set(celsiusLabelHand,'FontName','Lato Bold'); set(celsiusLabelHand,'FontSize',16);
 degCaxis = gca; %Grab axis in order to change color
 set(degCaxis,'YColor',[0 112 115]./255); %Teal - note that this is the same axis for temperature (blue) and dewpoint (green)
 set(degCaxis,'FontName','Lato Bold'); set(degCaxis,'FontSize',14);
-addaxis(serialTimes,pressure,[minPre-0.2 maxPre+0.2],'r','LineWidth',2.3); %Plot pressure in hPa
+addaxis(serialTimes,pressure,[minPre-0.2 maxPre+0.2],'Color',[255 170 0]./255,'LineWidth',2.3); %Plot pressure in hPa
 pressureLabelHand = addaxislabel(2,'hPa');
 set(pressureLabelHand,'FontName','Lato Bold'); set(pressureLabelHand,'FontSize',16);
 addaxis(serialTimes,humidity,[minHum-10 maxHum],'m','LineWidth',2.3); %Plot humidity in %, leaving max at maxHum because it's 100
@@ -142,7 +142,7 @@ end
 for windCount = length(serialTimes):spacer:1 %Loop backwards through winds
     windbarb(serialTimes(windCount),minDegC-2.5,windSpd(windCount),windDir(windCount),barbScale,0.09,'r',1); %#justiceforbarb
     if isnan(windCharSpd(windCount))~=1 %If there is a wind character entry
-        windbarb(serialTimes(windCount),minDegC-3.5,windCharSpd(windCount),windDir(windCount),barbScale,0.09,'g',1); %Make wind barb for the character as well
+        windbarb(serialTimes(windCount),minDegC-3.5,windCharSpd(windCount),windDir(windCount),barbScale,0.09,[179 77 77]./255,1); %Make wind barb for the character as well
     end
     hold on %Otherwise only one barb will be plotted
 end
@@ -153,7 +153,7 @@ xlim([serialTimes(1)-0.02 serialTimes(end)+0.02]); %For the #aesthetic
 titleString = 'Surface observations data for ';
 toString = 'to';
 spaceString = {' '}; %Yes those curly brackets are needed
-windString = 'Red barbs denote winds and green barbs denote wind character';
+windString = 'Upper barbs denote winds; lower barbs denote wind character';
 if dStart==dEnd
     obsDate = datestr(serialTimes(1),'mm/dd/yy');
     titleMsg = [titleString datestr(obsDate)]; %Builds title message "Surface observations data for mm/dd/yy"

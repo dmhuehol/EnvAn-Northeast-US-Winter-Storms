@@ -15,8 +15,8 @@
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
-    %Version Date: 4/9/2018
-    %Last major revision: 4/9/2018
+    %Version Date: 6/25/2018
+    %Last major revision: 6/25/2018
     %
     %See also IGRAimpf, prestogeo
     %
@@ -28,12 +28,24 @@ errorThreshold = 0.08*length(soundStruct); %Set a threshold for an acceptable nu
 
 for count = 1:length(soundStruct)
     try
-        [~,geoSound(count).height] = prestogeo(soundStruct(count).pressure,soundStruct(count).temp); %prestogeo converts pressure to geopotential height
+        [~,geoSound(count).calculated_height] = prestogeo(soundStruct(count).pressure,soundStruct(count).temp); %prestogeo converts pressure to geopotential height
     catch ME;
         errorCount = errorCount+1;
         if errorCount>errorThreshold %This keeps the function from blundering through a forest of errors; don't change this without a REALLY good reason
             msg = 'Number of errors has exceeded maximum allowable value! Check dataset or code for problems.';
-            error(msg);
+            disp(msg);
+            prompt = 'Continue? Y/N'; %Don't want to end the function entirely, as some soundings will legitimately have more than 8% error (for instance some African historical soundings where temperature was not recorded regularly)
+            str = input(prompt,'s');
+            if strcmp(str,'N')==1
+                stopMsg = 'Stopped!';
+                error(stopMsg)
+            end
+            if strcmp(str,'Y')==1
+                msg = 'Continued processing';
+                disp(msg)
+                errorCount = 0; errorThreshold = length(soundStruct)+1;
+                continue
+            end
         else
             continue
         end

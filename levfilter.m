@@ -19,7 +19,7 @@
     %Written by Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
-    %Version Date: 6/13/2018
+    %Version Date: 6/25/2018
     %Last major revision: 6/13/2017
     %
     %See also IGRAimpf, fullIGRAimp
@@ -47,9 +47,11 @@ for t = 1:r %Loop through structure
     fil(t).geopotential_flag(index) = [];
     fil(t).pressure_flag(index) = [];
     fil(t).temp_flag(index) = [];
-    if isfield(fil,'dewpt')==1 %Only need to check for dewpoint because dewrelh always creates relative humidity as well as dewpoint
-        fil(t).rhum(index) = [];
+    if isfield(fil,'dewpt')==1
         fil(t).dewpt(index) = [];
+    end
+    if isfield(fil,'rhum')==1
+        fil(t).rhum(index) = [];
     end
 end
 end

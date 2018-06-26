@@ -1,4 +1,4 @@
-function [sndng,filtered,soundsh,soundsWithDewRH,soundsWithHeight,goodfinal,warmnosesfinal,nowarmnosesfinal] = fullIGRAimp(input_file)
+function [sndng,filtered,soundsh,soundsWithDewRH,soundsWithHeight,goodfinal,warmnosesfinal,nowarmnosesfinal] = fullIGRAimp(input_file,version)
 %%fullIGRAimp
     %Function which, given a file of raw IGRA v1 soundings data, will read
     %the data into MATLAB, filter it according to year, filter it according
@@ -9,7 +9,7 @@ function [sndng,filtered,soundsh,soundsWithDewRH,soundsWithHeight,goodfinal,warm
     %like soundplots.
     %
     %General form:
-    %[sndng,filtered,soundsh,soundsWithDewRH,soundsWithHeight,goodfinal,warmnosesfinal,nowarmnosesfinal] = fullIGRAimp(input_file)
+    %[sndng,filtered,soundsh,soundsWithDewRH,soundsWithHeight,goodfinal,warmnosesfinal,nowarmnosesfinal] = fullIGRAimp(input_file,version)
     %
     %Outputs:
     %sndng: raw soundings data read into MATLAB and separated into different
@@ -26,10 +26,7 @@ function [sndng,filtered,soundsh,soundsWithDewRH,soundsWithHeight,goodfinal,warm
     %
     %Input:
     %input_file: file path of a *.dat IGRA v1 data file
-    %
-    %Eventually it is planned to have the various filters controlled at the
-    %inputs, but for now it is necessary to change such settings within the
-    %function.
+    %version: IGRA version of input file (1 for v1, 2 for v2)
     %
     %KNOWN ISSUES: more accurate progress bar is needed, runtime is
     %relatively slow.
@@ -39,7 +36,7 @@ function [sndng,filtered,soundsh,soundsWithDewRH,soundsWithHeight,goodfinal,warm
     %Written by Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
-    %Version date: 4/21/2018
+    %Version date: 6/25/2018
     %Last major revision: 4/21/2018
     %
     %See also importIGRAv1, timefilter, levfilter, dewrelh, surfconfilter,
@@ -51,7 +48,13 @@ disp('Import started!')
     
 % Read soundings data into MATLAB
 try
-    [sndng] = importIGRAv1(input_file); %This produces a structure of soundings data with minimal quality control.
+    if version==1
+        [sndng] = importIGRAv1(input_file); %This produces a structure of soundings data with minimal quality control.
+    elseif version==2
+        [sndng,~] = importIGRAv2(input_file); %Only v1sndng will be created
+    else
+        error('Only 1 and 2 are valid version inputs! Check input and try again.');
+    end
 catch ME
     msg = 'Failed to create raw soundings structure! Check data file for errors and try again.';
     error(msg)
@@ -71,7 +74,7 @@ disp('Level filtering complete! 3/5')
 soundsh = soundsh'; %Correct shape of structure
 
 % Add dewpoint and temperature to the soundings data
-[soundsWithDewRH] = addDewRH(soundsh);
+[soundsWithDewRH] = addDewRH(soundsh,'both');
 
 % Add height to the soundings data
 [soundsWithHeight] = addHeight(soundsWithDewRH);

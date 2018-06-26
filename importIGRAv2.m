@@ -24,15 +24,15 @@
     %   wind_spd: wind speed, measured in meters/second
     %   u_comp: zonal component of wind, measured in meters/second
     %   v_comp: meridional component of wind, measured in meters/second
-    %   geopotential flag: 1 = value is within climatological limits based on all years and all days at the station, 2 = value is within climatological limits and limits based on specifics to the time of year and time of day at the station, 0 = no climatological check
-    %   pressure flag: same meaning as geopotential flag
+    %   geopotential_flag: 1 = value is within climatological limits based on all years and all days at the station, 2 = value is within climatological limits and limits based on specifics to the time of year and time of day at the station, 0 = no climatological check
+    %   pressure_flag: same meaning as geopotential flag
     %   temp_flag: same meaning as geopotential flag
     %
     %v2sndng: Contains all of the data fields found in v1sndng, as well as
     %   the following fields which are only available in IGRA v2 data.
     %   release_time: the actual UTC HHMM time of release
     %   elapsed_time: the time taken by the balloon to reach the current level in MMMSS
-    %   relative_humidity: measured in %
+    %   rhum: measured in %
     %   latitude: measured in decimal but recorded without decimal point
     %   longitude: measured in decimal but recorded without decimal point
     %   
@@ -161,6 +161,8 @@ for r = 1:count
     v2sndng(r).release_time = header{r}{7}; %Actual launch time of the sounding in HHMM UTC time
     v2sndng(r).elapsed_time = str2num(raw{r}{1}(:,4:8)); %#ok %Elapsed time in MMMSS without leading zeros
     v2sndng(r).rhum = str2num(raw{r}{1}(:,29:33))/10; %#ok %Relative humidity
+    
+    v2sndng(r).rhum(v2sndng(r).rhum<0) = NaN; %Convert impossible humidity values to NaN
     
     % Collect the latitude/longitude and convert them to numbers
     %   Note that nothing is done here about the lack of decimals

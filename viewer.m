@@ -32,7 +32,7 @@
     %Next phase of viewer will use the geopotential height field from the
     %data preferentially, in reflection of its presence in IGRA v2 data.
     %
-    %Version Date: 6/21/2018
+    %Version Date: 6/25/2018
     %Last major revision: 6/21/2018
     %Written by: Daniel Hueholt
     %North Carolina State University
@@ -56,6 +56,13 @@ if strcmp('both',tempToPlot)==1
         try
             kmCutoff = logical(soundingStruct(snum).height <= kmTop+1); %Find indices of readings where the height less than the maximum height requested, plus a bit for better plotting
             useTemp = soundingStruct(snum).temp(kmCutoff==1);
+            if isempty(useTemp)==1
+                dateString = datestr(datenum(soundingStruct(snum).valid_date_num(1),soundingStruct(snum).valid_date_num(2),soundingStruct(snum).valid_date_num(3),soundingStruct(snum).valid_date_num(4),0,0),'mmm dd, yyyy HH UTC'); %For title
+                disp(['Sounding from ' dateString ' skipped due to plotting error.'])
+                errorDates{eCount} = dateString;
+                eCount = eCount+1;
+                continue
+            end
             useHeight = soundingStruct(snum).height(kmCutoff==1);
             if isfield(soundingStruct,'wetbulb')==1 %Check if structure already has wetbulb temperature
                 useWet = soundingStruct(snum).wetbulb(kmCutoff==1);
@@ -180,6 +187,13 @@ elseif strcmp('temp',tempToPlot)==1
         try
             kmCutoff = logical(soundingStruct(snum).height <= kmTop+1); %Find indices of readings where the height less than the maximum height requested, plus a bit for better plotting
             useTemp = soundingStruct(snum).temp(kmCutoff==1);
+            if isempty(useTemp)==1
+                dateString = datestr(datenum(soundingStruct(snum).valid_date_num(1),soundingStruct(snum).valid_date_num(2),soundingStruct(snum).valid_date_num(3),soundingStruct(snum).valid_date_num(4),0,0),'mmm dd, yyyy HH UTC'); %For title
+                disp(['Sounding from ' dateString ' skipped due to plotting error.'])
+                errorDates{eCount} = dateString;
+                eCount = eCount+1;
+                continue
+            end
             useHeight = soundingStruct(snum).height(kmCutoff==1);
             
             % Extra quality control to prevent jumps in the graphs
@@ -271,6 +285,7 @@ elseif strcmp('temp',tempToPlot)==1
             disp(['Sounding from ' dateString ' skipped due to plotting error.'])
             errorDates{eCount} = dateString;
             eCount = eCount+1;
+            continue
         end
     end
 end

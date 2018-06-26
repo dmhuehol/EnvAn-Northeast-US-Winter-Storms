@@ -17,7 +17,7 @@
     %kmTop: OPTIONAL INPUT maximum km to plot. Defaults to 13km melting
     %layers at Long Island are always within 5km of surface.    %
     %
-    %Version Date: 6/15/2018
+    %Version Date: 6/26/2018
     %Last major revision: 6/16/2018
     %Written by: Daniel Hueholt
     %North Carolina State University
@@ -66,9 +66,9 @@ if ~exist('foundit','var') %If the date doesn't have a corresponding entry in th
 end
 
 % Confine all data to between surface and maximum requested height
-kmCutoff = logical(sounding(foundit).height <= kmTop+1); %Find indices of readings where the height less than the maximum height requested, plus a bit for better plotting
+kmCutoff = logical(sounding(foundit).calculated_height <= kmTop+1); %Find indices of readings where the height less than the maximum height requested, plus a bit for better plotting
 useTemp = sounding(foundit).temp(kmCutoff==1);
-useHeight = sounding(foundit).height(kmCutoff==1);
+useHeight = sounding(foundit).calculated_height(kmCutoff==1);
 if isfield(sounding,'wetbulb')==1 %Check if structure already has wetbulb temperature
     useWet = sounding(foundit).wetbulb(kmCutoff==1);
 else %If it doesn't, then calculate wetbulb for just this sounding
@@ -85,6 +85,7 @@ else %If it doesn't, then calculate wetbulb for just this sounding
         end
     end
 end
+useWet = double(useWet); %Certain operations will not function while the data type is symbolic
 
 % Extra quality control to prevent jumps in the graphs
 useHeight(useHeight<-150) = NaN;

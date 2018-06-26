@@ -70,13 +70,18 @@ for mcount = 1:length(filter_settings.month) %Check every entry that has been re
 end
 mnindex = vertcat(mindex{1:end}); %String all of the cells into a single column vector
 
-if isempty(mnindex) == 1 && filter_settings.month~=9999 %If there's somehow no entries corresponding to the input month, report that to the user
+if isempty(mnindex) == 1 && filter_settings.month~=9999 %If there's no entries corresponding to the input month, report that to the user
     disp('No entries were found for the input month.')
     disp('(Note that this could indicate something is wrong with either the input month or with the data itself.)')
 else
     soundingt(mnindex,:) = []; %Destroy all elements across all variables corresponding to the indices of the input month(s)
 end
 
+%% Final checks
 sounding = table2struct(soundingt); %Convert back to a structure
+if isequaln(sounding,sndng')==1
+    identicalMsg = 'No changes made to original structure.';
+    disp(identicalMsg);
+end
 
 end

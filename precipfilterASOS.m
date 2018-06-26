@@ -1,3 +1,4 @@
+function [soundingsWithPrecip,soundingsSansPrecip] = precipfilterASOS(soundStruct,asosStruct,specific)
 %%precipfilterASOS
     %Filters a soundings structure by whether precipitation of any kind
     %occurred in the ASOS data for the sounding time. Mist, fog, and haze
@@ -14,11 +15,7 @@
     %Inputs:
     %soundStruct: a soundings data structure
     %asosStruct: an ASOS data structure from a location and time period
-    %   corresponding to the soundings data. Concatenate structures similarly to
-    %   arrays. (For example, for structures usefulKISP1114 and usefulKISP1214
-    %   containing data from November and December 2014, respectively, use
-    %   usefulKISP1112_2014 = [usefulKISP1114,usefulKISP1214] to construct
-    %   a single structure containing both months of data.)
+    %   corresponding to the soundings data.
     %specific: set to 1 to check for precipitation only at the time of the
     %   sounding, or set to 0 to check for precipitation +/- a number of
     %   entries defined by the grab variable (checks 12 entries [about an hour] by default)
@@ -34,13 +31,12 @@
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
-    %Version Date: 6/05/2018
-    %Last Major Revision: 6/05/2018
+    %Version Date: 6/26/2018
+    %Last Major Revision: 6/26/2018
     %
-    %See also ASOSimportFiveMin, fullIGRAimp, ASOSgrabber
+    %See also ASOSimportFiveMin, ASOSimportManyFiveMin, fullIGRAimp, ASOSgrabber
     %
 
-function [soundingsWithPrecip,soundingsSansPrecip] = precipfilterASOS(soundStruct,asosStruct,specific)
 
 if ~exist('specific','var')
     specific = 0; %Specific is very restrictive, so don't use it if it isn't specified.
@@ -57,7 +53,8 @@ asosDates = [[asosStruct.Year]' [asosStruct.Month]' [asosStruct.Day]' [asosStruc
 asosDates3 = reshape(asosDates,1,5,length(asosStruct)); %Array containing times for all ASOS observations
 asosDates2 = permute(asosDates3,[3,2,1]); %Reorder to be a 2D matrix with columns for YMDHM and each entry on a new row
 
-[~,~,validASOSind] = intersect(soundingDates2,asosDates2,'rows'); %The function only needs the valid ASOS indices, but the first and second output ~ are valid dates and valid sounding number, respectively
+[~,validSoundingNumbers,validASOSind] = intersect(soundingDates2,asosDates2,'rows'); %The function only needs the valid ASOS indices, but the first and second output ~ are valid dates and valid sounding number, respectively
+subset = soundStruct(validSoundingNumbers);
 
 grab = 12; %+/- 1 hour by default
 %Note that large values of grab can cause some soundings to be lost near the
@@ -142,8 +139,8 @@ else
     noPrecipInd = unique(refInd);
     noPrecipInd(withPrecipInd) = []; %Remove all precip entries
     
-    soundingsWithPrecip = soundStruct(withPrecipInd);
-    soundingsSansPrecip = soundStruct(noPrecipInd);
+    soundingsWithPrecip = subset(withPrecipInd);
+    soundingsSansPrecip = subset(noPrecipInd);
 end
 
 end
