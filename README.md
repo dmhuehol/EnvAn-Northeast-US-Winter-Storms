@@ -48,6 +48,8 @@ importIGRAv2: Imports IGRA v2 sounding data files into a MATLAB data structure. 
 
 levfilter: Removes an input level type from a soundings data structure. Updated 25 June 2018 for compatibility with IGRA v2.
 
+locateASOSstations: Locates all ASOS stations within a bounding box of latitude and longitude.
+
 newtip: Creates a custom Data Cursor tooltip using variables from within a parent function. Must be nested within another function. This version of newtip is specifically designed to work with wnAllPlot and wnYearPlot, but the method could easily be adapted for any similar circumstance.
 
 plotyyy: Plots data using three y-axes. Small changes made to original function written by Denis Gilbert of the Maurice Lamontagne Institute. Link to original function: https://www.mathworks.com/matlabcentral/fileexchange/1017-plotyyy
@@ -120,9 +122,11 @@ fullIGRAimpAfrica: Imports IGRA v2 data and applies multiple processing methods 
 
 fullIGRAimpv2: Imports and processes a v2 data structure.
 
+inversionCounter: Counts inversions within a sounding structure. Outdated, needs to be changed to calculated_height format or geopotential format, also needs to be documented and have new features added to make the new plots possible.
+
 makeComparisonImages: Script to easily generate TvZcomparison images.
 
-periodOfRecord: Displays the timeline of soundings launches near Long Island, NY throughout the IGRA v2 period. Shows spans only; written before I realized there were discontinuities in the individual files that the documentation did not describe.
+periodOfRecord: Displays the timeline of soundings launches near Long Island, NY throughout the IGRA v2 period. Shows spans only; written before I realized there were discontinuities in the individual files that the documentation did not describe. Updated 28 June 2018 with NC stations.
 
 surfAnalysisLI: Creates a local surface analysis for Long Island based on ASOS five-minute observations. Currently in the very early stages of development.
 
