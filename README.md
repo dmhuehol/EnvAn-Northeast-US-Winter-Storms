@@ -110,7 +110,11 @@ buoyPlotter: Plots air temperature, sea surface temperature, and dewpoint agains
 
 fullIGRAimpAfrica: Imports IGRA v2 data and applies multiple processing methods specifically useful with historical data from Africa. Not perfect, moisture processing often needs to be redone as early soundings will report humidity and later soundings will report dewpoint depression.
 
-periodOfRecord: Displays the timeline of soundings launches near Long Island, NY throughout the IGRA v2 period. Shows spans only; written before I realized there were discontinuities in the individual files that the documentation did not describe.
+inversionCounter: Detects and counts temperature inversions within a soundings data structure. Needs editing, documentation, will have new features added.
+
+locateASOSstations: Finds ASOS 5-minute stations within a latitude/longitude bounding box. Needs testing and some polishing (i.e. verifying inputs).
+
+periodOfRecord: Displays the timeline of soundings launches near Long Island, NY throughout the IGRA v2 period. Shows spans only; written before I realized there were discontinuities in the individual files that the documentation did not describe. Updated 6/28/2018 with NC stations and some documentation.
 
 surfAnalysisLI: Creates a local surface analysis for Long Island based on ASOS five-minute observations. Currently in the very early stages of development.
 
