@@ -15,7 +15,7 @@
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
-    %Version Date: 6/25/2018
+    %Version Date: 6/27/2018
     %Last major revision: 6/25/2018
     %
     %See also IGRAimpf, prestogeo
@@ -34,7 +34,7 @@ for count = 1:length(soundStruct)
         if errorCount>errorThreshold %This keeps the function from blundering through a forest of errors; don't change this without a REALLY good reason
             msg = 'Number of errors has exceeded maximum allowable value! Check dataset or code for problems.';
             disp(msg);
-            prompt = 'Continue? Y/N'; %Don't want to end the function entirely, as some soundings will legitimately have more than 8% error (for instance some African historical soundings where temperature was not recorded regularly)
+            prompt = 'Continue? Y/N '; %Don't want to end the function entirely, as some soundings will legitimately have more than 8% error (for instance some African historical soundings where temperature was not recorded regularly)
             str = input(prompt,'s');
             if strcmp(str,'N')==1
                 stopMsg = 'Stopped!';

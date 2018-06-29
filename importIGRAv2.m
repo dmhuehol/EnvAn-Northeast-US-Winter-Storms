@@ -173,6 +173,8 @@ for r = 1:count
         v2sndng(r).latitude = header{r}{11};
         v2sndng(r).longitude = header{r}{12};
     end
+    
+    v2sndng(r).stationID = [header{r}{1} header{r}{2}]; % Station ID
 end
 
 end

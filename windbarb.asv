@@ -141,154 +141,85 @@ l.Clipping = 'off';
 % the top of the figure.
 if (barb)
     if spd >= 150
-        l1 = line([x1 x2],[y1 y2],'linewidth',width,'color',color);
-        l2 = line([x2 x3],[y2 y3],'linewidth',width,'color',color);
-        l3 = line([x3 x4],[y3 y4],'linewidth',width,'color',color);
-        l4 = line([x4 x5],[y4 y5],'linewidth',width,'color',color);
-        l5 = line([x5 x6],[y5 y6],'linewidth',width,'color',color);
-        l6 = line([x6 x7],[y6 y7],'linewidth',width,'color',color);
-        l1.Clipping = 'off';
-        l2.Clipping = 'off';
-        l3.Clipping = 'off';
-        l4.Clipping = 'off';
-        l5.Clipping = 'off';
-        l6.Clipping = 'off';
+        line([x1 x2],[y1 y2],'linewidth',width,'color',color)
+        line([x2 x3],[y2 y3],'linewidth',width,'color',color)
+        line([x3 x4],[y3 y4],'linewidth',width,'color',color)
+        line([x4 x5],[y4 y5],'linewidth',width,'color',color)
+        line([x5 x6],[y5 y6],'linewidth',width,'color',color)
+        line([x6 x7],[y6 y7],'linewidth',width,'color',color)
     elseif spd >= 140
-        l1 = line([x1 x2],[y1 y2],'linewidth',width,'color',color);
-        l2 = line([x2 x3],[y2 y3],'linewidth',width,'color',color);
-        l3 = line([x3 x4],[y3 y4],'linewidth',width,'color',color);
-        l4 = line([x4 x5],[y4 y5],'linewidth',width,'color',color);
-        l5 = line([x5 x6],[y5 y6],'linewidth',width,'color',color);
-        l6 = line([x7 x8],[y7 y8],'linewidth',width,'color',color);
-        l7 = line([x9 x10],[y9 y10],'linewidth',width,'color',color);
-        l8 = line([x11 x12],[y11 y12],'linewidth',width,'color',color);
-        l1.Clipping = 'off';
-        l2.Clipping = 'off';
-        l3.Clipping = 'off';
-        l4.Clipping = 'off';
-        l5.Clipping = 'off';
-        l6.Clipping = 'off';
-        l7.Clipping = 'off';
-        l8.Clipping = 'off';
+        line([x1 x2],[y1 y2],'linewidth',width,'color',color)
+        line([x2 x3],[y2 y3],'linewidth',width,'color',color)
+        line([x3 x4],[y3 y4],'linewidth',width,'color',color)
+        line([x4 x5],[y4 y5],'linewidth',width,'color',color)
+        line([x5 x6],[y5 y6],'linewidth',width,'color',color)
+        line([x7 x8],[y7 y8],'linewidth',width,'color',color)
+        line([x9 x10],[y9 y10],'linewidth',width,'color',color)
+        line([x11 x12],[y11 y12],'linewidth',width,'color',color)
     elseif spd >= 135
-        l1 = line([x1 x2],[y1 y2],'linewidth',width,'color',color);
-        l2 = line([x2 x3],[y2 y3],'linewidth',width,'color',color);
-        l3 = line([x3 x4],[y3 y4],'linewidth',width,'color',color);
-        l4 = line([x4 x5],[y4 y5],'linewidth',width,'color',color);
-        l5 = line([x5 x6],[y5 y6],'linewidth',width,'color',color);
-        l6 = line([x7 x8],[y7 y8],'linewidth',width,'color',color);
-        l7 = line([x9 x10],[y9 y10],'linewidth',width,'color',color);
-        l8 = line([x11 (x12+x11)/2],[y11 (y12+y11)/2],'linewidth',width,'color',color);
-        l1.Clipping = 'off';
-        l2.Clipping = 'off';
-        l3.Clipping = 'off';
-        l4.Clipping = 'off';
-        l5.Clipping = 'off';
-        l6.Clipping = 'off';
-        l7.Clipping = 'off';
-        l8.Clipping = 'off';
+        line([x1 x2],[y1 y2],'linewidth',width,'color',color)
+        line([x2 x3],[y2 y3],'linewidth',width,'color',color)
+        line([x3 x4],[y3 y4],'linewidth',width,'color',color)
+        line([x4 x5],[y4 y5],'linewidth',width,'color',color)
+        line([x5 x6],[y5 y6],'linewidth',width,'color',color)
+        line([x7 x8],[y7 y8],'linewidth',width,'color',color)
+        line([x9 x10],[y9 y10],'linewidth',width,'color',color)
+        line([x11 (x12+x11)/2],[y11 (y12+y11)/2],'linewidth',width,'color',color)
     elseif spd >= 130
-        l1 = line([x1 x2],[y1 y2],'linewidth',width,'color',color);
-        l2 = line([x2 x3],[y2 y3],'linewidth',width,'color',color);
-        l3 = line([x3 x4],[y3 y4],'linewidth',width,'color',color);
-        l4 = line([x4 x5],[y4 y5],'linewidth',width,'color',color);
-        l5 = line([x5 x6],[y5 y6],'linewidth',width,'color',color);
-        l6 = line([x7 x8],[y7 y8],'linewidth',width,'color',color);
-        l7 = line([x9 x10],[y9 y10],'linewidth',width,'color',color);
-        l1.Clipping = 'off';
-        l2.Clipping = 'off';
-        l3.Clipping = 'off';
-        l4.Clipping = 'off';
-        l5.Clipping = 'off';
-        l6.Clipping = 'off';
-        l7.Clipping = 'off';
+        line([x1 x2],[y1 y2],'linewidth',width,'color',color)
+        line([x2 x3],[y2 y3],'linewidth',width,'color',color)
+        line([x3 x4],[y3 y4],'linewidth',width,'color',color)
+        line([x4 x5],[y4 y5],'linewidth',width,'color',color)
+        line([x5 x6],[y5 y6],'linewidth',width,'color',color)
+        line([x7 x8],[y7 y8],'linewidth',width,'color',color)
+        line([x9 x10],[y9 y10],'linewidth',width,'color',color)
     elseif spd >= 125
-        l1 = line([x1 x2],[y1 y2],'linewidth',width,'color',color);
-        l2 = line([x2 x3],[y2 y3],'linewidth',width,'color',color);
-        l3 = line([x3 x4],[y3 y4],'linewidth',width,'color',color);
-        l4 = line([x4 x5],[y4 y5],'linewidth',width,'color',color);
-        l5 = line([x5 x6],[y5 y6],'linewidth',width,'color',color);
-        l6 = line([x7 x8],[y7 y8],'linewidth',width,'color',color);
-        l7 = line([x9 (x10+x9)/2],[y9 (y10+y9)/2],'linewidth',width,'color',color);
-        l1.Clipping = 'off';
-        l2.Clipping = 'off';
-        l3.Clipping = 'off';
-        l4.Clipping = 'off';
-        l5.Clipping = 'off';
-        l6.Clipping = 'off';
-        l7.Clipping = 'off';
+        line([x1 x2],[y1 y2],'linewidth',width,'color',color)
+        line([x2 x3],[y2 y3],'linewidth',width,'color',color)
+        line([x3 x4],[y3 y4],'linewidth',width,'color',color)
+        line([x4 x5],[y4 y5],'linewidth',width,'color',color)
+        line([x5 x6],[y5 y6],'linewidth',width,'color',color)
+        line([x7 x8],[y7 y8],'linewidth',width,'color',color)
+        line([x9 (x10+x9)/2],[y9 (y10+y9)/2],'linewidth',width,'color',color)
     elseif spd >= 120
-        l1 = line([x1 x2],[y1 y2],'linewidth',width,'color',color);
-        l2 = line([x2 x3],[y2 y3],'linewidth',width,'color',color);
-        l3 = line([x3 x4],[y3 y4],'linewidth',width,'color',color);
-        l4 = line([x4 x5],[y4 y5],'linewidth',width,'color',color);
-        l5 = line([x5 x6],[y5 y6],'linewidth',width,'color',color);
-        l6 = line([x7 x8],[y7 y8],'linewidth',width,'color',color);
-        l1.Clipping = 'off';
-        l2.Clipping = 'off';
-        l3.Clipping = 'off';
-        l4.Clipping = 'off';
-        l5.Clipping = 'off';
-        l6.Clipping = 'off';
+        line([x1 x2],[y1 y2],'linewidth',width,'color',color)
+        line([x2 x3],[y2 y3],'linewidth',width,'color',color)
+        line([x3 x4],[y3 y4],'linewidth',width,'color',color)
+        line([x4 x5],[y4 y5],'linewidth',width,'color',color)
+        line([x5 x6],[y5 y6],'linewidth',width,'color',color)
+        line([x7 x8],[y7 y8],'linewidth',width,'color',color)
     elseif spd >= 115
-        l1 = line([x1 x2],[y1 y2],'linewidth',width,'color',color);
-        l2 = line([x2 x3],[y2 y3],'linewidth',width,'color',color);
-        l3 = line([x3 x4],[y3 y4],'linewidth',width,'color',color);
-        l4 = line([x4 x5],[y4 y5],'linewidth',width,'color',color);
-        l5 = line([x5 x6],[y5 y6],'linewidth',width,'color',color);
-        l6 = line([x7 (x8+x7)/2],[y7 (y8+y7)/2],'linewidth',width,'color',color);
-        l1.Clipping = 'off';
-        l2.Clipping = 'off';
-        l3.Clipping = 'off';
-        l4.Clipping = 'off';
-        l5.Clipping = 'off';
-        l6.Clipping = 'off';
+        line([x1 x2],[y1 y2],'linewidth',width,'color',color)
+        line([x2 x3],[y2 y3],'linewidth',width,'color',color)
+        line([x3 x4],[y3 y4],'linewidth',width,'color',color)
+        line([x4 x5],[y4 y5],'linewidth',width,'color',color)
+        line([x5 x6],[y5 y6],'linewidth',width,'color',color)
+        line([x7 (x8+x7)/2],[y7 (y8+y7)/2],'linewidth',width,'color',color)
     elseif spd >= 110
-        l1 = line([x1 x2],[y1 y2],'linewidth',width,'color',color);
-        l2 = line([x2 x3],[y2 y3],'linewidth',width,'color',color);
-        l3 = line([x3 x4],[y3 y4],'linewidth',width,'color',color);
-        l4 = line([x4 x5],[y4 y5],'linewidth',width,'color',color);
-        l5 = line([x5 x6],[y5 y6],'linewidth',width,'color',color);
-        l1.Clipping = 'off';
-        l2.Clipping = 'off';
-        l3.Clipping = 'off';
-        l4.Clipping = 'off';
-        l5.Clipping = 'off';
+        line([x1 x2],[y1 y2],'linewidth',width,'color',color)
+        line([x2 x3],[y2 y3],'linewidth',width,'color',color)
+        line([x3 x4],[y3 y4],'linewidth',width,'color',color)
+        line([x4 x5],[y4 y5],'linewidth',width,'color',color)
+        line([x5 x6],[y5 y6],'linewidth',width,'color',color)
     elseif spd >= 105
-        l1 = line([x1 x2],[y1 y2],'linewidth',width,'color',color);
-        l2 = line([x2 x3],[y2 y3],'linewidth',width,'color',color);
-        l3 = line([x3 x4],[y3 y4],'linewidth',width,'color',color);
-        l4 = line([x4 x5],[y4 y5],'linewidth',width,'color',color);
-        l5 = line([x5 (x6+x5)/2],[y5 (y6+y5)/2],'linewidth',width,'color',color);
-        l1.Clipping = 'off';
-        l2.Clipping = 'off';
-        l3.Clipping = 'off';
-        l4.Clipping = 'off';
-        l5.Clipping = 'off';
+        line([x1 x2],[y1 y2],'linewidth',width,'color',color)
+        line([x2 x3],[y2 y3],'linewidth',width,'color',color)
+        line([x3 x4],[y3 y4],'linewidth',width,'color',color)
+        line([x4 x5],[y4 y5],'linewidth',width,'color',color)
+        line([x5 (x6+x5)/2],[y5 (y6+y5)/2],'linewidth',width,'color',color)
     elseif spd >= 100
-        l1 = line([x1 x2],[y1 y2],'linewidth',width,'color',color);
-        l2 = line([x2 x3],[y2 y3],'linewidth',width,'color',color);
-        l3 = line([x3 x4],[y3 y4],'linewidth',width,'color',color);
-        l4 = line([x4 x5],[y4 y5],'linewidth',width,'color',color);
-        l1.Clipping = 'off';
-        l2.Clipping = 'off';
-        l3.Clipping = 'off';
-        l4.Clipping = 'off';
+        line([x1 x2],[y1 y2],'linewidth',width,'color',color)
+        line([x2 x3],[y2 y3],'linewidth',width,'color',color)
+        line([x3 x4],[y3 y4],'linewidth',width,'color',color)
+        line([x4 x5],[y4 y5],'linewidth',width,'color',color)
     elseif spd >= 95
-        l1 = line([x1 x2],[y1 y2],'linewidth',width,'color',color);
-        l2 = line([x2 x3],[y2 y3],'linewidth',width,'color',color);
-        l3 = line([x3 x4],[y3 y4],'linewidth',width,'color',color);
-        l4 = line([x5 x6],[y5 y6],'linewidth',width,'color',color);
-        l5 = line([x7 x8],[y7 y8],'linewidth',width,'color',color);
-        l6 = line([x9 x10],[y9 y10],'linewidth',width,'color',color);
-        l7 = line([x11 (x12+x11)/2],[y11 (y12+y11)/2],'linewidth',width,'color',color);
-        l1.Clipping = 'off';
-        l2.Clipping = 'off';
-        l3.Clipping = 'off';
-        l4.Clipping = 'off';
-        l5.Clipping = 'off';
-        l6.Clipping = 'off';
-        l7.Clipping = 'off';
+        line([x1 x2],[y1 y2],'linewidth',width,'color',color)
+        line([x2 x3],[y2 y3],'linewidth',width,'color',color)
+        line([x3 x4],[y3 y4],'linewidth',width,'color',color)
+        line([x5 x6],[y5 y6],'linewidth',width,'color',color)
+        line([x7 x8],[y7 y8],'linewidth',width,'color',color)
+        line([x9 x10],[y9 y10],'linewidth',width,'color',color)
+        line([x11 (x12+x11)/2],[y11 (y12+y11)/2],'linewidth',width,'color',color)
     elseif spd >= 90
         l1 = line([x1 x2],[y1 y2],'linewidth',width,'color',color);
         l2 = line([x2 x3],[y2 y3],'linewidth',width,'color',color);

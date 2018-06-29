@@ -22,7 +22,7 @@
     %filter_settings.year = [2002 2016] removes all data outside of 2002-2016 (inclusive)
     %filter_settings.month = [5,6,7,8,9] removes all data from May, June, July, August, and September
     %
-    % Version Date: 6/15/2018
+    % Version Date: 6/28/2018
     % Last major revision: 6/29/2017
     % Written by: Daniel Hueholt
     % North Carolina State University
@@ -70,8 +70,8 @@ for mcount = 1:length(filter_settings.month) %Check every entry that has been re
 end
 mnindex = vertcat(mindex{1:end}); %String all of the cells into a single column vector
 
-if isempty(mnindex) == 1 && filter_settings.month~=9999 %If there's no entries corresponding to the input month, report that to the user
-    disp('No entries were found for the input month.')
+if isempty(mnindex) == 1 %If there's no entries corresponding to the input month, report that to the user
+    disp('No entries were found for the input month(s).')
     disp('(Note that this could indicate something is wrong with either the input month or with the data itself.)')
 else
     soundingt(mnindex,:) = []; %Destroy all elements across all variables corresponding to the indices of the input month(s)

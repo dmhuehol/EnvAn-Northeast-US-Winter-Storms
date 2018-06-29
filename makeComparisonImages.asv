@@ -1,0 +1,10 @@
+datesJLN = [1970,2,16,12; 1970,3,3,12; 1970,4 14 12; 1971,2,11,12; 1971,11,29,12; 1971,12,10,12; 1972,1,4,12; ...
+    1972,1,6,12; 1972,1,17,12; 1972,3,14,12];
+
+
+
+
+for dateLoop = 1:length(datesJLN)
+    try
+        TvZcomparison(datesJLN(dateLoop),datesJLN(dateLoop,2),datesJLN(dateLoop,3),datesJLN(dateLoop,4),v2jfk,v2lga,v2nantucket,3);
+    catc
