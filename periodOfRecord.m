@@ -3,8 +3,8 @@
     %sites located around the Long Island area. Refers to the IGRA v2
     %dataset.
     %
-    %Version date: 6/12/2018
-    %
+    %Version date: 6/28/2018
+    %Last major revision: 6/28/2018
     %Written by: Daniel Hueholt
     %Undergraduate Research Assistant at Environment Analytics
     %North Carolina State University
