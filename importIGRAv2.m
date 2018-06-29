@@ -44,7 +44,7 @@
     %NOTE for the future: Whenever we update to MATLAB 2016b+, change the textscan call to use
     %new data types like datetimes.
     %
-    %Version date: 6/14/2018
+    %Version date: 6/28/2018
     %Last major revision: 6/14/2018
     %Written by: Daniel Hueholt
     %North Carolina State University

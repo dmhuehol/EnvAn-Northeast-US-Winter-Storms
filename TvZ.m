@@ -15,8 +15,8 @@
     %sounding: a structure of soundings data
     %kmTop: OPTIONAL the maximum height in km to be plotted, defaults to 13 km.
     %
-    %Version Date: 6/27/2018
-    %Last major revision: 6/16/2018
+    %Version Date: 6/28/2018
+    %Last major revision: 6/28/2018
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
