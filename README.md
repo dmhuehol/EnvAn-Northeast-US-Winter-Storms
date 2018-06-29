@@ -7,12 +7,12 @@ Unless otherwise noted, all functions are written by Daniel Hueholt at North Car
 
 abacusDemo: Demonstrates abacus plots, the plot style used to plot ASOS precipitation type data versus time in surfacePlotter.
 
-addaxis: Functions to add multiple axes to a plot. Written by Harry Lee; found on the MATLAB file exchange.
+addaxis: Functions to add multiple axes to a plot. Written by Harry Lee; found on the MATLAB file exchange. Updated 28 June 2018 with Jessica Keller's fix to make these functions compatible with MATLAB 2017+.
 Original link: https://www.mathworks.com/matlabcentral/profile/authors/863384-harry-lee
 
 addDewRH: Adds calculated dewpoint and/or relative humidity fields to a soundings data structure, as long as that structure includes dewpoint depression measurements. Updated 25 June 2018 with new controls at input and adds support for dewFromRH.
 
-addHeight: Adds a calculated geopotential height field to a soundings structure. Updated 25 June 2018 with new user input features to control error checking.
+addHeight: Adds a calculated geopotential height field to a soundings structure. Updated 25 June 2018 with new user input features to control error checking. Updated 27 June 2018 with improvements to error prompt.
 
 addWetbulb: Adds a calculated wetbulb field to a soundings structure. Runtime can be extremely long.
 
@@ -42,9 +42,9 @@ findTheCloud: Finds cloud layers within a sounding for a given time, outputting 
 
 fullIGRAimp: Imports IGRA data and applies multiple processing methods from other functions, outputting a new sounding structure associated with each modification to the data structure. Updated 25 June 2018 with new version control at input to make compatible with IGRA v2 data. Requires importIGRAv1, importIGRAv2, timefilter, levfilter, addDewRH, dewrelh, surfconfilter, nosedetect, prestogeo, simple_prestogeo
 
-importIGRAv1: Creates a structure of soundings data from raw Integrated Global Radiosonde Archive v1 .dat data. Renamed from IGRAimpf on 6/23/2018. (Based on part of a script originally written by Megan Amanatides.)
+importIGRAv1: Creates a structure of soundings data from raw Integrated Global Radiosonde Archive v1 .dat data. Renamed from IGRAimpf on 3 June 2018. (Based on part of a script originally written by Megan Amanatides.)
 
-importIGRAv2: Imports IGRA v2 sounding data files into a MATLAB data structure. Updated 25 June 2018 to fix spelling errors in the function help.
+importIGRAv2: Imports IGRA v2 sounding data files into a MATLAB data structure. Updated 25 June 2018 to fix spelling errors in the function help. Updated 28 June 2018 to import station ID as well.
 
 levfilter: Removes an input level type from a soundings data structure. Updated 25 June 2018 for compatibility with IGRA v2.
 
@@ -71,6 +71,8 @@ skewtIGRA: Generate a skew-T chart for an input sounding. Adapted from code orig
 
 soundplots: Generates a variety of figures (TvZ, TvP, RHvZ, RHvP, skew-T) based on soundings data for a specific time and date. Requires: dewrelh, skewtIGRA, rhumplot
 
+stationLookupIGRAv2: Retrieves the name of a sounding launch site given a station ID; allows for automation of figure title creation.
+
 surfacePlotter: Visualizes ASOS five-minute surface conditions data on two figures: one displaying temperature, pressure, dewpoint, humidity, wind, and wind character; the second is an abacus plot of precipitation type. Updated 26 June 2018 with aesthetic changes mostly for better colorblind safety. Requires external functions addaxis, tlabel, and windbarb. addaxis was originally written by Harry Lee, tlabel by Carlos Adrian Vargas Aguilera, and windbarb by Laura Tomkins.
 addaxis original link: https://www.mathworks.com/matlabcentral/fileexchange/9016-addaxis
 tlabel original link: https://www.mathworks.com/matlabcentral/fileexchange/19314-tlabel-m-v2-6-1--sep-2009-
@@ -80,15 +82,19 @@ surfAnalysisDemo: Demonstrates the creation of a local surface analysis using to
 
 surfconfilter: Filters a soundings data structure based on surface  relative humidity and/or temperature.
 
-timefilter: Removes input years and months from a sounding structure. Updated 25 June 2018 with some reorganization and more accurate final message.
+timefilter: Removes input years and months from a sounding structure. Updated 25 June 2018 with some reorganization and more accurate final message. Updated 28 June 2018 to attempt to improve empty month message, but honestly the messaging system in this function is a trainwreck and needs to be reworked.
 
 tlabel: External function to improve on datetick and datetickzoom. Written by Carlos Adrian Vargas Aguilera, found on the MATLAB file exchange. Original link: https://www.mathworks.com/matlabcentral/fileexchange/19314-tlabel-m-v2-6-1--sep-2009-
 
 TTwvZ: Plots temperature and wetbulb temperature against height given an input time and soundings data structure. Updated 26 June 2018 to work with new names for calculated height field, and to change datatype to double.
 
-TvZ: Plots temperature vs height from soundings data given an input time.
+TvZ: Plots temperature vs height from soundings data given an input time. Updated 28 June 2018 with improvements corresponding to new version of MATLAB, i.e. dot notation.
 
 TvZbasic: Plots temperature vs height from soundings data given an input time, with figure settings set up for maximum ease in customization. Renamed from TvZprint in final push.
+
+TvZcomparison: Plots a composite temperature and wind vs height figure for multiple sites at an input time. Requires findsnd, TvZ, and windbarb. windbarb function was written by Laura Tomkins (github @lauratomkins).
+
+TwindvZ: Plots temperature and wind vs height for an input time. Requires windbarb. windbarb function was written by Laura Tomkins (github @lauratomkins).
 
 viewer: Sequentially displays all soundings for an input span of time in either temperature vs height or temperature+wetbulb vs height format. Block of code to save all images is commented out. Suffers from the issue that prestogeo has when the first entry in a soundings temperature vector is NaN and therefore geopotential height cannot be calculated. In Phase 3, this function (and likely all vZ functions) will be changed to use the geopotential field included in IGRA v2 data. Updated 25 June 2018 so figures are only opened if the plotting completes successfully.
 
@@ -96,11 +102,13 @@ weatherCodeSearch: Locates all times that an input weather code is observed in a
 
 wetbulb: Numerically evaluates the wetbulb temperature given dewpoint, pressure, and temperature.
 
-windbarb: Plots wind barbs. Written by Laura Tomkins (github @lauratomkins) in May 2017.
+windbarb: Plots wind barbs. Written by Laura Tomkins (github @lauratomkins) in May 2017. Edited to disable clipping for all possible lines (makes plotting wind profile vs height possible).
 
 windbarbForSurfAn: Very lightly modified version of windbarb to make it plot correctly on ASOS surface analyses. windbarb function was written by Laura Tomkins (github @lauratomkins) in May 2017.
 
 windplot: Demonstrates how to make a wind barb time series as used in surfacePlotter. Requires windbarb. windbarb function was written by Laura Tomkins (github @lauratomkins) in May 2017.
+
+windvZ: Plots wind against height for an input sounding.
 
 In progress:
 
@@ -109,6 +117,10 @@ buoyImport: Imports National Buoy Data Center buoy data files into MATLAB, apply
 buoyPlotter: Plots air temperature, sea surface temperature, and dewpoint against time. Only works if all data is the same length; needs to be fixed in import and tested more extensively here.
 
 fullIGRAimpAfrica: Imports IGRA v2 data and applies multiple processing methods specifically useful with historical data from Africa. Not perfect, moisture processing often needs to be redone as early soundings will report humidity and later soundings will report dewpoint depression.
+
+fullIGRAimpv2: Imports and processes a v2 data structure.
+
+makeComparisonImages: Script to easily generate TvZcomparison images.
 
 periodOfRecord: Displays the timeline of soundings launches near Long Island, NY throughout the IGRA v2 period. Shows spans only; written before I realized there were discontinuities in the individual files that the documentation did not describe.
 
