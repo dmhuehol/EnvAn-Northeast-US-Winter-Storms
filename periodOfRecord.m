@@ -10,6 +10,7 @@
     %North Carolina State University
     %
 
+%% New York
 st.Upton = 1994:2018;
 st.LaGuardia = 1939:1972;
 st.JFK = 1952:1980;
@@ -30,6 +31,25 @@ st.FalmouthOtisAFB = 1964:1965;
 stationLabels = {'Upton','La Guardia','JFK','Hempstead','NYU','Westhampton','Fishers Island','Staten Island','Hartford','Lakehurst','Spring Lake','Fort Monmouth','Newark','Point Judith','Nantucket','Falmouth-Otis AFB'};
 stationPointers = {'Upton','LaGuardia','JFK','Hempstead','NYU','Westhampton','FishersIsland','StatenIsland','Hartford','Lakehurst','SpringLake','FortMonmouth','Newark','PointJudith','Nantucket','FalmouthOtisAFB'};
 
+%% North Carolina
+st.PopeAFB = 1919:1990;
+st.CapeHatteras = 1941:1994;
+st.MoreheadCity = 1994:2018;
+st.Raleigh = 1941:1974;
+st.Greensboro = 1928:2018;
+st.FortBragg = 1984:1988;
+st.DareGunnery = 1973:1991;
+st.Laurinburg = 1942:1951;
+st.Wilmington = 1943:1945;
+st.OakIsland = 1944:1945;
+st.Charlotte = 1942:1943;
+
+stationLabels = {'Pope AFB','Cape Hatteras','Morehead City','Raleigh','Greensboro','Fort Bragg','Dare Gunnery','Laurinburg','Wilmington','Oak Island','Charlotte'};
+stationPointers = {'PopeAFB','CapeHatteras','MoreheadCity','Raleigh','Greensboro','FortBragg','DareGunnery','Laurinburg','Wilmington','OakIsland','Charlotte'};
+
+
+
+%% Plot settings
 wire = 1;
 for c = 1:length(stationPointers)
     plot(st.(stationPointers{c}),ones(1,length(st.(stationPointers{c}))).*wire,'LineWidth',2.5);
@@ -38,9 +58,9 @@ for c = 1:length(stationPointers)
 end
 
 axe = gca;
-set(axe,'YTick',1:0.5:wire-0.5)
-set(axe,'YTickLabel',stationLabels)
-set(axe,'XTick',1918:3:2018)
+axe.YTick = 1:0.5:wire-0.5;
+axe.YTickLabel = stationLabels;
+axe.XTick = 1918:3:2018;
 ylim([0,wire+1])
 xlim([1918 2018])
  

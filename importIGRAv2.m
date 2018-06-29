@@ -150,7 +150,8 @@ for r = 1:count
     v1sndng(r).pressure(v1sndng(r).pressure < 0) = NaN;
     v1sndng(r).geopotential(v1sndng(r).geopotential < 0) = NaN;
     v1sndng(r).temp(v1sndng(r).temp< -888) = NaN;
-    v1sndng(r).dew_point_dep(v1sndng(r).dew_point_dep< -888) = NaN; 
+    v1sndng(r).dew_point_dep(v1sndng(r).dew_point_dep< -888) = NaN;
+    
 end
 
 %% Construct the v2 structure
@@ -173,6 +174,7 @@ for r = 1:count
         v2sndng(r).latitude = header{r}{11};
         v2sndng(r).longitude = header{r}{12};
     end
+    
 end
 
 end
