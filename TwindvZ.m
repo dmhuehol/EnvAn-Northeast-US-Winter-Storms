@@ -17,7 +17,7 @@
     %
     %windbarb was written by Laura Tomkins, github @lauratomkins
     %
-    %Version Date: 6/29/2018
+    %Version Date: 7/2/2018
     %Last major revision: 6/28/2018
     %Written by: Daniel Hueholt
     %North Carolina State University
@@ -104,8 +104,8 @@ axe.FontSize = 12;
 axe.YTick = [0 0.5 1 1.5 2 2.5 3 3.5 4 4.5 5 6 7 8 9 10 11 12 13];
 axe.XTick = [-45 -40 -35 -30 -25 -22 -20 -18 -16 -14 -12 -10 -8 -6 -5 -4 -3 -2 -1 0 1 2 3 4 5 6 8 10 12 14 16 18 20 22 25 30 35 40];
 t = title([launchname ' Sounding for ' dateString]);
-t.FontName = 'Lato Bold';
-t.FontSize = 14;
+t.FontName = 'Lato';
+t.FontSize = 18;
 xLab = xlabel(['Temperature in ' char(176) 'C']);
 xLab.FontName = 'Lato Bold';
 xLab.FontSize = 14;
@@ -118,14 +118,17 @@ ylim([0 kmTop])
 hold on
 
 for w = 1:length(useWindSpd)
+    if isnan(useWindSpd(w))==1 || isnan(useWindDir(w))==1 %If there's missing data
+        continue %Skip it
+    end
     windbarb(max(useTemp)+4,useGeo(w),useWindSpd(w),useWindDir(w),0.04,0.8,'r',1);
     hold on
 end
 
-% fig = gcf;
-% set(fig,'PaperUnits','inches','PaperPosition',[0 0 20 10.46])
-% dateStringFilename = datestr(datenum(sounding(foundit).valid_date_num(1),sounding(foundit).valid_date_num(2),sounding(foundit).valid_date_num(3),sounding(foundit).valid_date_num(4),0,0),'mmddyyyyHH'); %For filename
-% print(fig,[dateStringFilename '.png'],'-dpng')
-% 
+fig = gcf;
+set(fig,'PaperUnits','inches','PaperPosition',[0 0 20 10.46])
+dateStringFilename = datestr(datenum(sounding(foundit).valid_date_num(1),sounding(foundit).valid_date_num(2),sounding(foundit).valid_date_num(3),sounding(foundit).valid_date_num(4),0,0),'mmddyyyyHH'); %For filename
+print(fig,[dateStringFilename '.png'],'-dpng')
+
 
 end

@@ -1,7 +1,7 @@
 function [inversionNum,faulty,percentInversion] = inversionCounter(soundingStruct)
 %%inversionCounter
-    %Detects and counts temperature inversions in the lowest 5 km of the
-    %atmosphere for all soundings in an input structure.
+    %Detects and counts temperature inversions for all soundings in an
+    %input structure.
     %
     %General form: [inversionNum,faulty,percentInversion] = inversionCounter(soundingStruct)
     %
@@ -9,58 +9,35 @@ function [inversionNum,faulty,percentInversion] = inversionCounter(soundingStruc
     %inversionNum: Number of soundings with temperature inversions present
     %   in the lowest ~5km
     %faulty: Number of soundings that failed somewhere in the process
-    %percentInversion: Percentage of soundings in the structure that have a
-    %   temperature inversion in the lowest ~5km
-    %
-    %Input:
-    %soundingStruct: A soundings data structure, which must have a
-    %   calculated height field.
-    %
-    %Version date: 7/2/2018
-    %Last major revision: 7/2/2018
-    %Written by: Daniel Hueholt
-    %North Carolina State University
-    %Undergraduate Research Assistant at Environment Analytics
-    %
-    %See also addHeight
-    %
+    %percentInversion:
 
-%% Counters
+% Counters
+st = 1;
+nst = 1;
 tc = 1;
 heightPlus = 1;
 inversionNum = 0;
 faulty = 0;
 fCount = 1;
-switcher = 0;
 
-%% Detect inversions
+soundingStruct.geopotential
+
+
 for sc = 1:length(soundingStruct)
-    soundingStruct(sc).geopotential = soundingStruct(sc).geopotential./1000; %Convert to km
-    km5Ind = find(soundingStruct(sc).geopotential>=5); %Locate the first index of 5km or greater height in the sounding
-    if isempty(km5Ind)==1
-        km5Ind = find(soundingStruct(sc).calculated_height>=5); %Try it again, with the calculated height field
-        switcher = 1;
-    end
-    
-    if isempty(km5Ind)==1 %If the index cannot be located in either calculated height or measured height, then the sounding is faulty
+    km5Ind = find(soundingStruct(sc).calculated_height>=5); %Locate the first index of 5km or greater height in the sounding
+    if isempty(km5Ind)==1 %If this index cannot be located, then the sounding is faulty
         faulty(fCount) = sc; %Record this
         fCount = fCount+1;
         continue %Skip the sounding
     end
+    %wetH(sc).temp(km5Ind(1):end) = [];
     
-    while tc<km5Ind(1) %For the lowest 5km of the atmosphere (roughly)
+    while tc<km5Ind(1) %length(wetH(sc).temp)-1 %For the lowest 5km of the atmosphere (roughly)
         try
-            if switcher==0
-                mcheck = soundingStruct(sc).geopotential(tc+heightPlus)-soundingStruct(sc).geopotential(tc); %Check the span between each index pair
-            elseif switcher==1
-                mcheck = soundingStruct(sc).calculated_height(tc+heightPlus)-soundingStruct(sc).calculated_height(tc); %Check the span between each index pair
-            end
+            mcheck = soundingStruct(sc).calculated_height(tc+heightPlus)-soundingStruct(sc).calculated_height(tc); %Check the span between each index pair
         catch ME %#ok If this fails
             disp(sc) %Let the user know
-            %fCount = fCount+1; %The sounding is faulty? I don't think so,
-            %this'll lead to a false increase in faulty soundings as the
-            %fault counter could increment multiple times in a single
-            %sounding
+            %fCount = fCount+1; %The sounding is faulty? I don't think so
             tc = tc+1; %Try the next pair
         end
         if mcheck<0.20 %If the distance between the index span is less than 200 meters
@@ -97,6 +74,6 @@ for sc = 1:length(soundingStruct)
     tc = 1;
 end
 
-percentInversion = inversionNum/(length(soundingStruct)-fCount)*100; %Calculate the percentage of soundings with inversions
+percentInversion = inversionNum/(length(soundingStruct)-fCount); %Calculate the percentage of soundings with inversions
 
 end
