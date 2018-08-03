@@ -73,7 +73,7 @@ skewtIGRA: Generate a skew-T chart for an input sounding. Adapted from code orig
 
 soundplots: Generates a variety of figures (TvZ, TvP, RHvZ, RHvP, skew-T) based on soundings data for a specific time and date. Requires: dewrelh, skewtIGRA, rhumplot
 
-stationLookupIGRAv2: Retrieves the name of a sounding launch site given a station ID; allows for automation of figure title creation.
+stationLookupIGRAv2: Retrieves the name of a sounding launch site given a station ID; allows for automation of figure title creation. Updated July 2018 with better name for Denver soundings.
 
 surfacePlotter: Visualizes ASOS five-minute surface conditions data on two figures: one displaying temperature, pressure, dewpoint, humidity, wind, and wind character; the second is an abacus plot of precipitation type. Updated 26 June 2018 with aesthetic changes mostly for better colorblind safety. Requires external functions addaxis, tlabel, and windbarb. addaxis was originally written by Harry Lee, tlabel by Carlos Adrian Vargas Aguilera, and windbarb by Laura Tomkins.
 addaxis original link: https://www.mathworks.com/matlabcentral/fileexchange/9016-addaxis
@@ -96,7 +96,7 @@ TvZbasic: Plots temperature vs height from soundings data given an input time, w
 
 TvZcomparison: Plots a composite temperature and wind vs height figure for multiple sites at an input time. Requires findsnd, TvZ, and windbarb. windbarb function was written by Laura Tomkins (github @lauratomkins).
 
-TwindvZ: Plots temperature and wind vs height for an input time. Requires windbarb. windbarb function was written by Laura Tomkins (github @lauratomkins).
+TwindvZ: Plots temperature and wind vs height for an input time. Requires windbarb. windbarb function was written by Laura Tomkins (github @lauratomkins). Updated 23 July 2018 with repair for issue where windbarbs would be plotted in the wrong place if the T-span was set by user instead of being generated dynamically.
 
 viewer: Sequentially displays all soundings for an input span of time in either temperature vs height or temperature+wetbulb vs height format. Block of code to save all images is commented out. Suffers from the issue that prestogeo has when the first entry in a soundings temperature vector is NaN and therefore geopotential height cannot be calculated. In Phase 3, this function (and likely all vZ functions) will be changed to use the geopotential field included in IGRA v2 data. Updated 25 June 2018 so figures are only opened if the plotting completes successfully.
 
@@ -122,7 +122,11 @@ fullIGRAimpAfrica: Imports IGRA v2 data and applies multiple processing methods 
 
 fullIGRAimpv2: Imports and processes a v2 data structure.
 
-inversionCounter: Counts inversions within a sounding structure. Outdated, needs to be changed to calculated_height format or geopotential format, also needs to be documented and have new features added to make the new plots possible.
+inversionCounter: renamed 3 August 2018 to inversionsAndMeltingLayers
+
+inversions: Generates plots of statistics of inversions, such as height distributions. Plots are generated correctly, but currently the function to count inversions doesn't work.
+
+inversionsAndMeltingLayers: Detects and counts inversions within a sounding structure. Correctly represents whether a sounding has a lowest-5 inversion or not, but currently misrepresents the number of inversions in each sounding. Last updated 2 July 2018.
 
 makeComparisonImages: Script to easily generate TvZcomparison images.
 
