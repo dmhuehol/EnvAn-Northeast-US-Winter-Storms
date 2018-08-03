@@ -1,7 +1,7 @@
 
 # EnvAn-Northeast US Winter Storms
 
-Contains MATLAB software for soundings and surface observations data analysis, used mostly for the northeast US winter storms project at Environment Analytics.
+Contains MATLAB software for meteorological data analysis, particularly soundings and surface observations. Used mostly for the northeast US winter storms project at Environment Analytics.
 
 Unless otherwise noted, all functions are written by Daniel Hueholt at North Carolina State University.
 
@@ -12,7 +12,7 @@ Original link: https://www.mathworks.com/matlabcentral/profile/authors/863384-ha
 
 addDewRH: Adds calculated dewpoint and/or relative humidity fields to a soundings data structure, as long as that structure includes dewpoint depression measurements. Updated 25 June 2018 with new controls at input and adds support for dewFromRH.
 
-addHeight: Adds a calculated geopotential height field to a soundings structure. Updated 25 June 2018 with new user input features to control error checking. Updated 27 June 2018 with improvements to error prompt.
+addHeight: Adds a calculated geopotential height field to a soundings structure. Updated 25 June 2018 with new user input features to control error checking. Updated 6 July 2018 with further improvements to error prompt.
 
 addWetbulb: Adds a calculated wetbulb field to a soundings structure. Runtime can be extremely long.
 
@@ -75,7 +75,7 @@ soundplots: Generates a variety of figures (TvZ, TvP, RHvZ, RHvP, skew-T) based 
 
 stationLookupIGRAv2: Retrieves the name of a sounding launch site given a station ID; allows for automation of figure title creation.
 
-surfacePlotter: Visualizes ASOS five-minute surface conditions data on two figures: one displaying temperature, pressure, dewpoint, humidity, wind, and wind character; the second is an abacus plot of precipitation type. Updated 26 June 2018 with aesthetic changes mostly for better colorblind safety. Requires external functions addaxis, tlabel, and windbarb. addaxis was originally written by Harry Lee, tlabel by Carlos Adrian Vargas Aguilera, and windbarb by Laura Tomkins.
+surfacePlotter: Visualizes ASOS five-minute surface conditions data on two figures: one displaying temperature, pressure, dewpoint, humidity, wind, and wind character; the second is an abacus plot of precipitation type. Updated 6 July 2018 to fix axis error caused by updating MATLAB to 2014b+. Requires external functions addaxis, tlabel, and windbarb. addaxis was originally written by Harry Lee, tlabel by Carlos Adrian Vargas Aguilera, and windbarb by Laura Tomkins.
 addaxis original link: https://www.mathworks.com/matlabcentral/fileexchange/9016-addaxis
 tlabel original link: https://www.mathworks.com/matlabcentral/fileexchange/19314-tlabel-m-v2-6-1--sep-2009-
 Laura Tomkins can be found on github @lauratomkins
@@ -88,13 +88,13 @@ timefilter: Removes input years and months from a sounding structure. Updated 25
 
 tlabel: External function to improve on datetick and datetickzoom. Written by Carlos Adrian Vargas Aguilera, found on the MATLAB file exchange. Original link: https://www.mathworks.com/matlabcentral/fileexchange/19314-tlabel-m-v2-6-1--sep-2009-
 
-TTwvZ: Plots temperature and wetbulb temperature against height given an input time and soundings data structure. Updated 26 June 2018 to work with new names for calculated height field, and to change datatype to double.
+TTwvZ: Plots temperature and wetbulb temperature against height given an input time and soundings data structure. Updated 26 June 2018 to work with new names for calculated height field, and to change datatype to double. Updated 2 August 2018 with minor improvements and temporary aesthetic changes.
 
-TvZ: Plots temperature vs height from soundings data given an input time. Updated 28 June 2018 with improvements corresponding to new version of MATLAB, i.e. dot notation.
+TvZ: Plots temperature vs height from soundings data given an input time. Updated 28 June 2018 with improvements corresponding to new version of MATLAB, i.e. dot notation. Updated 6 July 2018 to fix some bad variable names.
 
 TvZbasic: Plots temperature vs height from soundings data given an input time, with figure settings set up for maximum ease in customization. Renamed from TvZprint in final push.
 
-TvZcomparison: Plots a composite temperature and wind vs height figure for multiple sites at an input time. Requires findsnd, TvZ, and windbarb. windbarb function was written by Laura Tomkins (github @lauratomkins).
+TvZcomparison: Plots a composite temperature and wind vs height figure for multiple sites at an input time. Requires findsnd, TvZ, and windbarb. windbarb function was written by Laura Tomkins (github @lauratomkins). Updated 6 July 2018 to fix some bad variable names.
 
 TwindvZ: Plots temperature and wind vs height for an input time. Requires windbarb. windbarb function was written by Laura Tomkins (github @lauratomkins).
 
@@ -118,9 +118,13 @@ buoyImport: Imports National Buoy Data Center buoy data files into MATLAB, apply
 
 buoyPlotter: Plots air temperature, sea surface temperature, and dewpoint against time. Only works if all data is the same length; needs to be fixed in import and tested more extensively here.
 
+findCloseSoundings: Very beginning of a function to find close soundings given inputs such as time span, lat/lon box, or both.
+
 fullIGRAimpAfrica: Imports IGRA v2 data and applies multiple processing methods specifically useful with historical data from Africa. Not perfect, moisture processing often needs to be redone as early soundings will report humidity and later soundings will report dewpoint depression.
 
 fullIGRAimpv2: Imports and processes a v2 data structure.
+
+habitDiagram: Very beginning of a function to plot ice habit diagrams. Likely will be deleted soon.
 
 inversionCounter: Counts inversions within a sounding structure. Outdated, needs to be changed to calculated_height format or geopotential format, also needs to be documented and have new features added to make the new plots possible.
 
@@ -129,6 +133,8 @@ makeComparisonImages: Script to easily generate TvZcomparison images.
 periodOfRecord: Displays the timeline of soundings launches near Long Island, NY throughout the IGRA v2 period. Shows spans only; written before I realized there were discontinuities in the individual files that the documentation did not describe. Updated 28 June 2018 with NC stations.
 
 surfAnalysisLI: Creates a local surface analysis for Long Island based on ASOS five-minute observations. Currently in the very early stages of development.
+
+TTwwindvZ: Plots profiles for wind, temperature, and wetbulb temperature given an input sounding. Currently works, but needs testing and documentation revision. Documentation is currently unchanged from the precursor function TTwvZ.
 
 Other files:
 
