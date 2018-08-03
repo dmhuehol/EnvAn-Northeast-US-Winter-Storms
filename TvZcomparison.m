@@ -23,7 +23,7 @@ function [foundit] = TvZcomparison(y,m,d,t,sounding1,sounding2,sounding3,kmTop)
     %number of colors; changing these would allow for more soundings to be
     %plotted.
     %
-    %Version Date: 6/28/2018
+    %Version Date: 7/6/2018
     %Last major revision: 6/28/2018
     %Written by: Daniel Hueholt
     %North Carolina State University
@@ -103,8 +103,8 @@ for sc = length(foundit):-1:1
     useWindSpd(useWindSpd>999.9) = NaN;
     
     % Freezing line
-    freezingspan = [0 16];
-    freezingy = ones(1,length(freezingspan)).*0;
+    freezingy = [0 16];
+    freezingx = ones(1,length(freezingy)).*0;
     
     % Plotting
     TvZ(sc) = plot(useTemp,useGeo); %TvZ
@@ -135,9 +135,10 @@ for sc = length(foundit):-1:1
     %Best consistent axis for winter JFK/LGA comparison is -15 to 20C
     %JFK/LGA winter: -15 to 20
     %Falmouth/Nantucket summer: 0 to 25
+    %Aberdeen/Rapid City/Omaha Valley winter: -20 to 10
     
-    xMin = -15; %C
-    xMax = 20; %C
+    xMin = -30; %C
+    xMax = -2; %C
     xlim([xMin xMax])
     ylim([0 kmTop])
     hold on
@@ -152,7 +153,7 @@ for sc = length(foundit):-1:1
     
 end
 
-freeze = plot(freezingy,freezingspan,'Color','k','LineWidth',2.2); %Freezing line; plotted last so that it will have the final legend item
+freeze = plot(freezingx,freezingy,'Color','k','LineWidth',2.2); %Freezing line; plotted last so that it will have the final legend item
 
 if length(launchname)==2
     leg = legend([TvZ freeze],launchname{1},launchname{2},'Freezing');
@@ -166,5 +167,5 @@ set(fig,'PaperUnits','inches','PaperPosition',[0 0 20 10.46]) %1920x1004
 dateStringFilename = datestr(datenum(composite.(fields{sc})(foundit(sc)).valid_date_num(1),composite.(fields{sc})(foundit(sc)).valid_date_num(2),composite.(fields{sc})(foundit(sc)).valid_date_num(3),composite.(fields{sc})(foundit(sc)).valid_date_num(4),0,0),'mmmddyyyyHH');
 print(fig,[dateStringFilename '.png'],'-dpng')
 
-close all
+%close all
 end

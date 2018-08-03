@@ -1,4 +1,4 @@
-%%TTwvZ
+%%TTwwindvZ
     %Function to plot temperature and wetbulb temperature against height
     %given an input date and soundings structure. Additionally, allows for
     %user control of the maximum height plotted.
@@ -26,7 +26,7 @@
     %See also fullIGRAimp, wetbulb, addWetbulb
     %
 
-function [foundit] = TTwvZ(y,m,d,t,sounding,kmTop)
+function [foundit] = TTwwindvZ(y,m,d,t,sounding,kmTop)
 
 % Checks relating to the kmTop input
 if exist('kmTop','var')==0 %Default height is 13 km
@@ -86,6 +86,10 @@ else %If it doesn't, then calculate wetbulb for just this sounding
     end
 end
 useWet = double(useWet); %Certain operations will not function while the data type is symbolic
+kmCutWind = logical(sounding(foundit).calculated_height<=kmTop);
+useWindSpd = sounding(foundit).wind_spd(kmCutWind==1);
+useWindSpd = useWindSpd.*1.943844; %Convert m/s to knots
+useWindDir = sounding(foundit).wind_dir(kmCutWind==1);
 
 % Extra quality control to prevent jumps in the graphs
 useHeight(useHeight<-150) = NaN;
@@ -114,6 +118,7 @@ plot(useWet,useHeight,'Color',[128 0 255]./255,'LineWidth',2.4); %TwvZ
 
 % Plot settings
 legend('Temperature','Freezing','Wetbulb')
+legend('AutoUpdate','Off')
 dateString = datestr(datenum(sounding(foundit).valid_date_num(1),sounding(foundit).valid_date_num(2),sounding(foundit).valid_date_num(3),sounding(foundit).valid_date_num(4),0,0),'mmm dd, yyyy HH UTC'); %For title
 titleHand = title(['Sounding for ' dateString]);
 set(titleHand,'FontName','Lato Bold'); set(titleHand,'FontSize',20)
@@ -154,7 +159,12 @@ switch kmTop
         set(ax,'YTick',[0 0.125 0.25 0.375 0.5 0.625 0.75 0.875 1])
 end
 set(ax,'FontName','Lato Bold'); set(ax,'FontSize',18)
-hold off
+hold on
+
+for w = 1:length(useWindSpd)
+    windbarb(max(useTemp)+2,useHeight(w),useWindSpd(w),useWindDir(w),0.04,0.8,'r',1);
+    hold on
+end
 
 set(ax,'XTick',[-45 -40 -35 -30 -25 -22 -20 -18 -16 -14 -12 -10 -8 -6 -5 -4 -3 -2 -1 0 1 2 3 4 5 6 8 10 12 14 16 18 20 22 25 30 35 40])
 

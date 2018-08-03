@@ -15,7 +15,7 @@
     %sounding: a structure of soundings data
     %kmTop: OPTIONAL the maximum height in km to be plotted, defaults to 13 km.
     %
-    %Version Date: 6/28/2018
+    %Version Date: 7/6/2018
     %Last major revision: 6/28/2018
     %Written by: Daniel Hueholt
     %North Carolina State University
@@ -78,14 +78,14 @@ useTemp(useTemp<-150) = NaN;
 useTemp(useTemp>100) = NaN;
 
 % Freezing line
-freezingx = [0 16];
-freezingy = ones(1,length(freezingx)).*0;
+freezingy = [0 16];
+freezingx = ones(1,length(freezingx)).*0;
 
 % Plotting
 figure;
 plot(useTemp,useGeo,'Color','b','LineWidth',2.4); %TvZ
 hold on
-plot(freezingy,freezingx,'Color','r','LineWidth',2) %Freezing line
+plot(freezingx,freezingy,'Color','r','LineWidth',2) %Freezing line
 
 % Plot settings
 dateString = datestr(datenum(sounding(foundit).valid_date_num(1),sounding(foundit).valid_date_num(2),sounding(foundit).valid_date_num(3),sounding(foundit).valid_date_num(4),0,0),'mmm dd, yyyy HH UTC'); %For title
