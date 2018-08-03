@@ -35,7 +35,7 @@
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
-    %Version date: 6/26/2018
+    %Version date: 7/6/2018
     %Last major revision: 11/13/2017
     %
     %tlabel written by Carlos Adrian Vargas Aguilera, last updated 9/2009,
@@ -54,8 +54,11 @@ function [surfaceSubset] = surfacePlotter(dStart,hStart,dEnd,hEnd,ASOS)
 %% Locate the requested data
 extractDays = [ASOS.Day]; %Array of all days within the given structure, bracket is required to form an array instead of list
 logicalDays = logical(extractDays==dStart | extractDays==dEnd); %Logically index the days; 1 represents start/end day entries, 0 represents all others
+if dStart==1
+    logicalDays(end-120:end) = 0; %Zero out any indices that could possibly be associated with the first day of the next month
+end
 dayIndices = find(logicalDays~=0); %These are the indices of the input day(s)
-if isempty(dayIndices)==1; %If day is not found
+if isempty(dayIndices)==1 %If day is not found
     dayMsg = 'No data from input day(s) present in structure!';
     error(dayMsg); %Give a useful error message
 end
@@ -63,7 +66,7 @@ end
 extractHours = [ASOS(dayIndices).Hour]; %Array of all hours from the given days
 logicalHours = logical(extractHours==hStart); %Since it's possible for end to be a number smaller than start and hence deceive the function, start by finding only the start hour
 hStartIndices = find(logicalHours~=0); %These are the indices of the input starting hour
-if isempty(hStartIndices)==1; %If start hour is not found
+if isempty(hStartIndices)==1 %If start hour is not found
     startHourMsg = 'Failed to find start hour in structure!';
     error(startHourMsg); %Give a useful error message
 end
@@ -75,7 +78,7 @@ if hStart==hEnd %For cases where the end hour and start hour are the same number
     logicalHours(indStartAndEnd(1):indStartAndEnd(2)) = 0; %Zero all the indices that corresponded to the start hour
 end
 hEndIndices = find(logicalHours~=0); %These are the indices of the ending hour
-if isempty(hEndIndices)==1; %Check to see whether the ending indices were found
+if isempty(hEndIndices)==1 %Check to see whether the ending indices were found
     msg = 'Could not find end hour in structure!'; %If not
     error(msg); %give a useful error message
 end
@@ -104,27 +107,30 @@ minHum = nanmin(humidity);
 maxHum = 100.02; %Maximum humidity will always be at least close to 100, so set to just above 100 to make figures consistent while not cutting off 100 values when saving
 minPre = nanmin(pressure);
 maxPre = nanmax(pressure);
+font = 'Lato Bold';
+labelTxt = 16;
+axTxt = 16;
 
 figure; %Make new figure
 tempAndDew = plot(serialTimes,TdT); %Plot temperature and dewpoint in deg C
 set(tempAndDew,'LineWidth',2.3)
 ylim([minDegC-4 maxDegC+1]) %Set ylim according to max/min degree; the min limit is offset by -3 instead of -1 in order to make room for the wind barbs
 celsiusLabelHand = ylabel([char(176) 'C']);
-set(celsiusLabelHand,'FontName','Lato Bold'); set(celsiusLabelHand,'FontSize',16);
+set(celsiusLabelHand,'FontName',font); set(celsiusLabelHand,'FontSize',labelTxt);
 degCaxis = gca; %Grab axis in order to change color
 set(degCaxis,'YColor',[0 112 115]./255); %Teal - note that this is the same axis for temperature (blue) and dewpoint (green)
-set(degCaxis,'FontName','Lato Bold'); set(degCaxis,'FontSize',14);
+set(degCaxis,'FontName',font); set(degCaxis,'FontSize',axTxt);
 addaxis(serialTimes,pressure,[minPre-0.2 maxPre+0.2],'Color',[255 170 0]./255,'LineWidth',2.3); %Plot pressure in hPa
 pressureLabelHand = addaxislabel(2,'hPa');
-set(pressureLabelHand,'FontName','Lato Bold'); set(pressureLabelHand,'FontSize',16);
+set(pressureLabelHand,'FontName',font); set(pressureLabelHand,'FontSize',labelTxt);
 addaxis(serialTimes,humidity,[minHum-10 maxHum],'m','LineWidth',2.3); %Plot humidity in %, leaving max at maxHum because it's 100
 humidityLabelHand = addaxislabel(3,'%');
-set(humidityLabelHand,'FontName','Lato Bold'); set(humidityLabelHand,'FontSize',14);
-legendHand = legend('Dewpoint','Temperature','Pressure','Humidity');
-set(legendHand,'FontName','Lato Bold'); set(legendHand,'FontSize',14);
+set(humidityLabelHand,'FontName',font); set(humidityLabelHand,'FontSize',labelTxt);
+legendHand = legend('Dewpoint','Temperature','Pressure','Humidity','AutoUpdate','off');
+set(legendHand,'FontName',font); set(legendHand,'FontSize',14);
 allAxes = findall(0,'type','axes'); %Find all axes
-set(allAxes(3),'FontName','Lato Bold'); set(allAxes(3),'FontSize',12); %Change humidity axis font
-set(allAxes(4),'FontName','Lato Bold'); set(allAxes(4),'FontSize',12); %Change pressure axis font
+set(allAxes(2),'FontName',font); set(allAxes(2),'FontSize',axTxt);
+set(allAxes(3),'FontName',font); set(allAxes(3),'FontSize',axTxt);
 
 %%Plot wind data
 %Note this is on the same plot as above data
