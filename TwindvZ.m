@@ -17,7 +17,7 @@
     %
     %windbarb was written by Laura Tomkins, github @lauratomkins
     %
-    %Version Date: 7/2/2018
+    %Version Date: 7/23/2018
     %Last major revision: 6/28/2018
     %Written by: Daniel Hueholt
     %North Carolina State University
@@ -89,9 +89,11 @@ freezingy = ones(1,length(freezingx)).*0;
 
 % Plotting
 figure;
-plot(useTemp,useGeo,'Color','b','LineWidth',2.4); %TvZ
+%plot(useTemp,useGeo,'Color','b','LineWidth',3.4); %TvZ
+plot(useTemp,useGeo,'Color',[16 84 86]./255,'LineWidth',3.4); %TvZ
 hold on
-plot(freezingy,freezingx,'Color','r','LineWidth',2) %Freezing line
+%plot(freezingy,freezingx,'Color','r','LineWidth',2.5) %Freezing line
+plot(freezingy,freezingx,'Color',[209 73 5]./255,'LineWidth',2.5) %Freezing line
 
 % Plot settings
 fig = gcf;
@@ -99,21 +101,24 @@ dateString = datestr(datenum(sounding(foundit).valid_date_num(1),sounding(foundi
 [launchname] = stationLookupIGRAv2(sounding(foundit).stationID);
 axe = gca;
 axe.Box = 'off';
-axe.FontName = 'Lato';
-axe.FontSize = 12;
+axe.FontName = 'Open Sans'; %'Lato';
+axe.FontSize = 17; %offset +5 from default for 2017-2018 slides
 axe.YTick = [0 0.5 1 1.5 2 2.5 3 3.5 4 4.5 5 6 7 8 9 10 11 12 13];
 axe.XTick = [-45 -40 -35 -30 -25 -22 -20 -18 -16 -14 -12 -10 -8 -6 -5 -4 -3 -2 -1 0 1 2 3 4 5 6 8 10 12 14 16 18 20 22 25 30 35 40];
 t = title([launchname ' Sounding for ' dateString]);
-t.FontName = 'Lato';
-t.FontSize = 18;
+t.FontName = 'Open Sans'; %'Lato';
+t.FontSize = 23;
 xLab = xlabel(['Temperature in ' char(176) 'C']);
-xLab.FontName = 'Lato Bold';
-xLab.FontSize = 14;
+xLab.FontName = 'Open Sans'; %'Lato Bold';
+xLab.FontSize = 19;
 yLab = ylabel('Height in km');
-yLab.FontName = 'Lato Bold';
-yLab.FontSize = 14;
-xlim([min(useTemp)-1 max(useTemp)+2])
-%xlim([-11 0])
+yLab.FontName = 'Open Sans'; %'Lato Bold';
+yLab.FontSize = 19;
+%xMax = max(useTemp)+2;
+%xMin = min(useTemp)-1;
+xMax = 2;
+xMin = -40;
+xlim([xMin xMax])
 ylim([0 kmTop])
 hold on
 
@@ -121,7 +126,8 @@ for w = 1:length(useWindSpd)
     if isnan(useWindSpd(w))==1 || isnan(useWindDir(w))==1 %If there's missing data
         continue %Skip it
     end
-    windbarb(max(useTemp)+4,useGeo(w),useWindSpd(w),useWindDir(w),0.04,0.8,'r',1);
+    %windbarb(max(useTemp)+4,useGeo(w),useWindSpd(w),useWindDir(w),0.04,0.8,'r',1);
+    windbarb(xMax+2,useGeo(w),useWindSpd(w),useWindDir(w),0.04,0.8,[16 84 86]./255,1);
     hold on
 end
 

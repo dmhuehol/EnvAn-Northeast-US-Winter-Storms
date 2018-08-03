@@ -31,6 +31,9 @@ rawName = cell2mat(igra2stationlist.Name(nameIndex));
 % representation and needs to be improved by hand
 % For most, make the name capitalized case for better readability
 switch nameIndex
+    case 2161
+        name = 'Denver/Stapleton Airport';
+        return
     case 2256
         name = 'JFK Airport';
         return
