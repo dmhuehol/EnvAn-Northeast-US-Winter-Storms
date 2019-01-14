@@ -1,14 +1,14 @@
 %%TTwvZ
-    %Function to plot temperature and wetbulb temperature against height
+    %Function to plot the height profile of temperature and wetbulb temperature
     %given an input date and soundings structure. Additionally, allows for
     %user control of the maximum height plotted.
     %
     %General form: [foundit] = TTwvZ(y,m,d,t,sounding,kmTop)
     %
-    %Output:
+    %Output
     %foundit: the index of the sounding corresponding to the time
     %
-    %Inputs:
+    %Inputs
     %y: four digit year
     %m: two digit month
     %d: one or two digit day
@@ -17,13 +17,13 @@
     %kmTop: OPTIONAL INPUT maximum km to plot. Defaults to 13km melting
     %layers at Long Island are always within 5km of surface.    %
     %
-    %Version Date: 6/26/2018
-    %Last major revision: 6/16/2018
+    %Version Date: 8/15/2018
+    %Last major revision: 8/15/2018
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
     %
-    %See also fullIGRAimp, wetbulb, addWetbulb
+    %See also wetbulb, addWetbulb
     %
 
 function [foundit] = TTwvZ(y,m,d,t,sounding,kmTop)
@@ -80,8 +80,9 @@ else %If it doesn't, then calculate wetbulb for just this sounding
     for c = 1:length(useTemp)
         try
             [useWet(c)] = wetbulb(usePressure(c),useDew(c),useTemp(c));
-        catch ME
+        catch ME %#ok
             %do nothing
+            %errors in wetbulb calculation will be dealt with later
         end
     end
 end
@@ -101,26 +102,18 @@ end
 sounding(foundit).temp(sounding(foundit).temp<-150) = NaN;
 
 % Freezing line
-freezingx = [0 16];
-freezingy = ones(1,length(freezingx)).*0;
+freezingy = [0 16];
+freezingx = ones(1,length(freezingy)).*0;
 
 % Plotting
 f = figure; %Figure is assigned to a handle for save options
 plot(useTemp,useHeight,'Color',[255 128 0]./255,'LineWidth',2.4) %TvZ
 hold on
-plot(freezingy,freezingx,'Color',[1 0 0],'LineWidth',2) %Freezing line
+plot(freezingx,freezingy,'Color',[0 0 0],'LineWidth',2) %Freezing line
 hold on
 plot(useWet,useHeight,'Color',[128 0 255]./255,'LineWidth',2.4); %TwvZ
 
 % Plot settings
-legend('Temperature','Freezing','Wetbulb')
-dateString = datestr(datenum(sounding(foundit).valid_date_num(1),sounding(foundit).valid_date_num(2),sounding(foundit).valid_date_num(3),sounding(foundit).valid_date_num(4),0,0),'mmm dd, yyyy HH UTC'); %For title
-titleHand = title(['Sounding for ' dateString]);
-set(titleHand,'FontName','Lato Bold'); set(titleHand,'FontSize',20)
-xlabHand = xlabel('Temperature in C');
-set(xlabHand,'FontName','Lato Bold'); set(xlabHand,'FontSize',20)
-ylabHand = ylabel('Height in km');
-set(ylabHand,'FontName','Lato Bold'); set(ylabHand,'FontSize',20)
 limits = [0 kmTop];
 ylim(limits);
 ax = gca;
@@ -153,10 +146,22 @@ switch kmTop
     case 1
         set(ax,'YTick',[0 0.125 0.25 0.375 0.5 0.625 0.75 0.875 1])
 end
-set(ax,'FontName','Lato Bold'); set(ax,'FontSize',18)
+set(ax,'FontName','Lato'); set(ax,'FontSize',16)
 hold off
 
 set(ax,'XTick',[-45 -40 -35 -30 -25 -22 -20 -18 -16 -14 -12 -10 -8 -6 -5 -4 -3 -2 -1 0 1 2 3 4 5 6 8 10 12 14 16 18 20 22 25 30 35 40])
+
+leg = legend('Temperature','Freezing','Wetbulb');
+leg.FontName = 'Lato';
+leg.FontSize = 14;
+dateString = datestr(datenum(sounding(foundit).valid_date_num(1),sounding(foundit).valid_date_num(2),sounding(foundit).valid_date_num(3),sounding(foundit).valid_date_num(4),0,0),'mmm dd, yyyy HH UTC'); %For title
+[launchname] = stationLookupIGRAv2(sounding(foundit).stationID);
+t = title({['Sounding for ' dateString],launchname});
+t.FontName = 'Lato Bold'; t.FontSize = 16;
+xLab = xlabel(['Temperature in ' char(176) 'C']);
+xLab.FontName = 'Lato Bold'; xLab.FontSize = 16;
+yLab = ylabel('Height in km');
+yLab.FontName = 'Lato Bold'; yLab.FontSize = 16;
 
 if min(useWet)<min(useTemp) %Wetbulb is always less than air temperature
     minLim = min(useWet);
@@ -165,6 +170,7 @@ else %But sometimes the moisture data cuts off early
 end
 maxLim = max(useTemp);
 xlim([minLim-1 maxLim+1])
+xlim([-12,5])
 %Max air temperature will always be greater than max wetbulb temperature:
 %Either both have been recorded, in which case air temperature is always
 %greater than wetbulb by definition, or air temperature stopped recording,

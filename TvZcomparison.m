@@ -1,7 +1,7 @@
 function [foundit] = TvZcomparison(y,m,d,t,sounding1,sounding2,sounding3,kmTop)
 %%TvZcomparison
     %Function to create a composite temperature vs height plot for multiple
-    %soundings from different locations given an input data and multiple
+    %soundings from different locations given an input date and multiple
     %data structures. Can plot up to three soundings.
     %
     %General form: [foundit] = TvZcomparison(y,m,d,t,sounding1,sounding2,sounding3,kmTop)
@@ -23,7 +23,7 @@ function [foundit] = TvZcomparison(y,m,d,t,sounding1,sounding2,sounding3,kmTop)
     %number of colors; changing these would allow for more soundings to be
     %plotted.
     %
-    %Version Date: 7/6/2018
+    %Version Date: 9/4/2018
     %Last major revision: 6/28/2018
     %Written by: Daniel Hueholt
     %North Carolina State University
@@ -70,8 +70,9 @@ fields = fieldnames(composite);
 % colors.blackberry = [174,109,143]./255;
 % colors.duskyblue = [132,154,197]./255;
 % colors.turquoisey = [65,197,199]./255;
-colors.chartreuse = [184 182 77]./255;
 colors.darkteal = [63 149 165]./255;
+colors.chartreuse = [184 182 77]./255;
+
 colors.dustypurple = [121 86 116]./255; 
 colornames = fieldnames(colors);
 
@@ -113,23 +114,27 @@ for sc = length(foundit):-1:1
     hold on
     
     % Plot settings
-    dateString = datestr(datenum(composite.(fields{sc})(foundit(sc)).valid_date_num(1),composite.(fields{sc})(foundit(sc)).valid_date_num(2),composite.(fields{sc})(foundit(sc)).valid_date_num(3),composite.(fields{sc})(foundit(sc)).valid_date_num(4),0,0),'mmm dd, yyyy HH UTC'); %For title
+    dateString = datestr(datenum(composite.(fields{sc})(foundit(sc)).valid_date_num(1),composite.(fields{sc})(foundit(sc)).valid_date_num(2),composite.(fields{sc})(foundit(sc)).valid_date_num(3),composite.(fields{sc})(foundit(sc)).valid_date_num(4),0,0),'dd mmm yyyy HH UTC'); %For title
     [launchname{sc}] = stationLookupIGRAv2(composite.(fields{sc})(foundit(sc)).stationID);
     axe = gca;
     axe.Box = 'off';
     axe.FontName = 'Lato';
-    axe.FontSize = 12;
-    t = title([launchname ' Soundings for ' dateString]);
+    axe.FontSize = 30;
+    if length(launchname)>1
+        t = title([launchname ' Soundings for ' dateString]);
+    else
+        t = title([launchname ' Sounding for ' dateString]);
+    end
     t.FontName = 'Lato Bold';
     t.FontSize = 14;
-    xLab = xlabel('Temperature in C');
+    xLab = xlabel(['Temperature in ' char(176) 'C']);
     xLab.FontName = 'Lato Bold';
-    xLab.FontSize = 14;
+    xLab.FontSize = 30;
     yLab = ylabel('Height in km');
     yLab.FontName = 'Lato Bold';
-    yLab.FontSize = 14;
+    yLab.FontSize = 30;
     axe.YTick = [0 0.5 1 1.5 2 2.5 3 3.5 4 4.5 5 6 7 8 9 10 11 12 13];
-    axe.XTick = [-45 -40 -35 -30 -25 -22 -20 -18 -16 -14 -12 -10 -8 -6 -5 -4 -3 -2 -1 0 1 2 3 4 5 6 8 10 12 14 16 18 20 22 25 30 35 40];
+    axe.XTick = [-45 -40 -35 -30 -25 -22 -20 -18 -16 -14 -12 -10 -8 -7 -6 -5 -4 -3 -2 -1 0 1 2 3 4 5 6 8 10 12 14 16 18 20 22 25 30 35 40];
     %xlim([min(useTemp)-1 max(useTemp)+1]) %Dynamically set x-axis limits
     
     %Best consistent axis for winter JFK/LGA comparison is -15 to 20C
@@ -137,8 +142,8 @@ for sc = length(foundit):-1:1
     %Falmouth/Nantucket summer: 0 to 25
     %Aberdeen/Rapid City/Omaha Valley winter: -20 to 10
     
-    xMin = -30; %C
-    xMax = -2; %C
+    xMin = -8; %C
+    xMax = 11; %C
     xlim([xMin xMax])
     ylim([0 kmTop])
     hold on
@@ -147,7 +152,12 @@ for sc = length(foundit):-1:1
         if isnan(useWindSpd(w))==1
             continue %Don't plot NaN winds at all
         end
-        windbarb(xMax+0.4+sc,useGeo(w),useWindSpd(w),useWindDir(w),0.025,1.9,colors.(colornames{sc}),1);
+        %windbarb(xMax+0.4+sc,useGeo(w),useWindSpd(w),useWindDir(w),0.025,1.9,colors.(colornames{sc}),1); %original
+        if sc==1 %Start the wind profile just outside of the figure, far enough that no possible barb will intrude onto the TvZ
+            windbarb(xMax+0.4,useGeo(w),useWindSpd(w),useWindDir(w),0.025,1.9,colors.(colornames{sc}),1); %for narrow plot
+        else
+            windbarb(xMax+sc-0.8,useGeo(w),useWindSpd(w),useWindDir(w),0.025,1.9,colors.(colornames{sc}),1); %for narrow plot
+        end
         hold on
     end
     
@@ -155,12 +165,15 @@ end
 
 freeze = plot(freezingx,freezingy,'Color','k','LineWidth',2.2); %Freezing line; plotted last so that it will have the final legend item
 
+if length(launchname)==1
+    leg = legend([TvZ freeze],launchname{1},'Freezing');
 if length(launchname)==2
     leg = legend([TvZ freeze],launchname{1},launchname{2},'Freezing');
 elseif length(launchname)==3
     leg = legend([TvZ freeze],launchname{1},launchname{2},launchname{3},'Freezing');
 end
-set(leg,'FontName','Lato'); set(leg,'FontSize',12)
+leg.FontName = 'Lato';
+leg.FontSize = 24;
 
 fig = gcf;
 set(fig,'PaperUnits','inches','PaperPosition',[0 0 20 10.46]) %1920x1004

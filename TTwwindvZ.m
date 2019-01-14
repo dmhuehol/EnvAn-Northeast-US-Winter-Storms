@@ -166,7 +166,7 @@ for w = 1:length(useWindSpd)
     hold on
 end
 
-set(ax,'XTick',[-45 -40 -35 -30 -25 -22 -20 -18 -16 -14 -12 -10 -8 -6 -5 -4 -3 -2 -1 0 1 2 3 4 5 6 8 10 12 14 16 18 20 22 25 30 35 40])
+%set(ax,'XTick',[-45 -40 -35 -30 -25 -22 -20 -18 -16 -14 -12 -10 -8 -6 -5 -4 -3 -2 -1 0 1 2 3 4 5 6 8 10 12 14 16 18 20 22 25 30 35 40])
 
 if min(useWet)<min(useTemp) %Wetbulb is always less than air temperature
     minLim = min(useWet);
@@ -174,7 +174,7 @@ else %But sometimes the moisture data cuts off early
     minLim = min(useTemp);
 end
 maxLim = max(useTemp);
-xlim([minLim-1 maxLim+1])
+%xlim([minLim-1 maxLim+1])
 %Max air temperature will always be greater than max wetbulb temperature:
 %Either both have been recorded, in which case air temperature is always
 %greater than wetbulb by definition, or air temperature stopped recording,

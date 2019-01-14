@@ -11,8 +11,8 @@ function [name] = stationLookupIGRAv2(stationID)
 %Input:
 %stationID: the 11-character IGRA v2 station identifier
 %
-%Version date: 6/27/2018
-%
+%Version date: 8/14/2018
+%Last major revision: 6/27/2018
 %Written by: Daniel Hueholt
 %North Carolina State University
 %Undergraduate Research Assistant at Environment Analytics
@@ -33,6 +33,9 @@ rawName = cell2mat(igra2stationlist.Name(nameIndex));
 switch nameIndex
     case 2161
         name = 'Denver/Stapleton Airport';
+        return
+    case 2173
+        name = 'LaGuardia Airport';
         return
     case 2256
         name = 'JFK Airport';

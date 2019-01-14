@@ -15,7 +15,7 @@
     %sounding: a structure of soundings data
     %kmTop: OPTIONAL the maximum height in km to be plotted, defaults to 13 km.
     %
-    %Version Date: 7/6/2018
+    %Version Date: 8/15/2018
     %Last major revision: 6/28/2018
     %Written by: Daniel Hueholt
     %North Carolina State University
@@ -79,7 +79,7 @@ useTemp(useTemp>100) = NaN;
 
 % Freezing line
 freezingy = [0 16];
-freezingx = ones(1,length(freezingx)).*0;
+freezingx = ones(1,length(freezingy)).*0;
 
 % Plotting
 figure;

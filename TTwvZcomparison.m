@@ -1,10 +1,12 @@
-function [foundit] = TvZcomparison(y,m,d,t,sounding1,sounding2,sounding3,kmTop)
-%%TvZcomparison
-    %Function to create a composite temperature vs height plot for multiple
-    %soundings from different locations given an input data and multiple
-    %data structures. Can plot up to three soundings.
+function [foundit] = TTwvZcomparison(y,m,d,t,sounding1,sounding2,sounding3,kmTop)
+%%TTwvZcomparison
+    %Function to create composite temperature and wetbulb temperature
+    %height profiles for multiple soundings from different locations given
+    %an input date and multiple data structures. Can plot up to three
+    %soundings. Much of this function is still hard coded and will be
+    %updated later.
     %
-    %General form: [foundit] = TvZcomparison(y,m,d,t,sounding1,sounding2,sounding3,kmTop)
+    %General form: [foundit] = TTwvZcomparison(y,m,d,t,sounding1,sounding2,sounding3,kmTop)
     %
     %Output:
     %foundit: the index of the sounding corresponding to the time
@@ -23,8 +25,8 @@ function [foundit] = TvZcomparison(y,m,d,t,sounding1,sounding2,sounding3,kmTop)
     %number of colors; changing these would allow for more soundings to be
     %plotted.
     %
-    %Version Date: 6/28/2018
-    %Last major revision: 6/28/2018
+    %Version Date: 8/15/2018
+    %
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
@@ -84,6 +86,29 @@ for sc = length(foundit):-1:1
     useWindSpd = useWindSpd.*1.943844; %Convert m/s to knots
     useWindDir = composite.(fields{sc})(foundit(sc)).wind_dir(kmCutWind==1);
     
+    if isempty(useTemp)==1
+        useGeo = composite.(fields{sc})(foundit(sc)).geopotential./1000;
+        kmCutoff = logical(useGeo <= kmTop+1);
+        kmCutWind = logical(useGeo <= kmTop);
+        useGeo = useGeo(kmCutoff==1);
+        useWindSpd = composite.(fields{sc})(foundit(sc)).wind_spd(kmCutWind==1);
+        useWindDir = composite.(fields{sc})(foundit(sc)).wind_dir(kmCutWind==1);
+        useTemp = NaN(1,length(useGeo));
+    end
+    
+    usePressure = composite.(fields{sc})(foundit(sc)).pressure(kmCutoff==1);
+    usePressure = usePressure./100; %Pressure must be in hPa for wetbulb calculation
+    useDew = composite.(fields{sc})(foundit(sc)).dewpt(kmCutoff==1); %Needed for wetbulb calculation
+    useWet = NaN(length(useTemp),1);
+    for c = 1:length(useTemp)
+        try
+            [useWet(c)] = wetbulb(usePressure(c),useDew(c),useTemp(c));
+        catch ME %#ok
+            %do nothing
+            %errors in wetbulb calculation will be dealt with later
+        end
+    end
+    
     % Extra quality control to prevent jumps in the graphs
     useGeo(useGeo<-150) = NaN;
     useGeo(useGeo>100) = NaN;
@@ -93,13 +118,18 @@ for sc = length(foundit):-1:1
     useWindSpd(useWindSpd>999.9) = NaN;
     
     % Freezing line
-    freezingspan = [0 16];
-    freezingy = ones(1,length(freezingspan)).*0;
+    freezingy = [0 16];
+    freezingx = ones(1,length(freezingy)).*0;
     
     % Plotting
     TvZ(sc) = plot(useTemp,useGeo); %TvZ
-    set(TvZ(sc),'Color',colors.(colornames{sc})); %Set color dynamically
-    set(TvZ(sc),'LineWidth',2.8)
+    TvZ(sc).Color = colors.(colornames{sc});
+    TvZ(sc).LineWidth = 2.8;
+    hold on
+    TTwvZ(sc) = plot(useWet,useGeo);
+    TTwvZ(sc).Color = colors.(colornames{sc});
+    TTwvZ(sc).LineStyle = '--';
+    TTwvZ(sc).LineWidth = 2.8;
     hold on
     
     % Plot settings
@@ -108,47 +138,59 @@ for sc = length(foundit):-1:1
     axe = gca;
     axe.Box = 'off';
     axe.FontName = 'Lato';
-    axe.FontSize = 12;
-    t = title([launchname ' Soundings for ' dateString]);
+    axe.FontSize = 14;
+    t = title([launchname ' Temperature (solid) and Wetbulb (dashed) Profiles for ' dateString]);
     t.FontName = 'Lato Bold';
     t.FontSize = 14;
-    xLab = xlabel('Temperature in C');
+    xLab = xlabel([char(176) 'C']);
     xLab.FontName = 'Lato Bold';
-    xLab.FontSize = 14;
+    xLab.FontSize = 16;
     yLab = ylabel('Height in km');
     yLab.FontName = 'Lato Bold';
-    yLab.FontSize = 14;
+    yLab.FontSize = 16;
     axe.YTick = [0 0.5 1 1.5 2 2.5 3 3.5 4 4.5 5 6 7 8 9 10 11 12 13];
-    axe.XTick = [-45 -40 -35 -30 -25 -22 -20 -18 -16 -14 -12 -10 -8 -6 -5 -4 -3 -2 -1 0 1 2 3 4 5 6 8 10 12 14 16 18 20 22 25 30 35 40];
+    axe.XTick = [-45 -40 -35 -30 -25 -22 -20 -18 -16 -14 -12 -10 -8 -7 -6 -5 -4 -3 -2 -1 0 1 2 3 4 5 6 8 10 12 14 16 18 20 22 25 30 35 40];
     %xlim([min(useTemp)-1 max(useTemp)+1]) %Dynamically set x-axis limits
-    %Best consistent axis for winter JFK/LGA comparison
-    xMin = -15; %C
-    xMax = 20; %C
+    
+    %Best consistent axis for winter JFK/LGA comparison is -15 to 20C
+    %JFK/LGA winter: -15 to 20
+    %Falmouth/Nantucket summer: 0 to 25
+    %Aberdeen/Rapid City/Omaha Valley winter: -20 to 10
+    
+    xMin = -12; %C
+    xMax = 5; %C
     xlim([xMin xMax])
     ylim([0 kmTop])
     hold on
     
     for w = 1:length(useWindSpd)
         if isnan(useWindSpd(w))==1
-            continue
+            continue %Don't plot NaN winds at all
         end
-        windbarb(xMax+0.4+sc,useGeo(w),useWindSpd(w),useWindDir(w),0.025,1.9,colors.(colornames{sc}),1);
+        %windbarb(xMax+0.4+sc,useGeo(w),useWindSpd(w),useWindDir(w),0.025,1.9,colors.(colornames{sc}),1); %original
+        if sc==1 %Start the wind profile just outside of the figure, far enough that no possible barb will intrude onto the TvZ
+            windbarb(xMax+0.4,useGeo(w),useWindSpd(w),useWindDir(w),0.025,1.9,colors.(colornames{sc}),1); %for narrow plot
+        else
+            windbarb(xMax+sc-0.8,useGeo(w),useWindSpd(w),useWindDir(w),0.025,1.9,colors.(colornames{sc}),1); %for narrow plot
+        end
         hold on
     end
     
 end
 
-freeze = plot(freezingy,freezingspan,'Color','r','LineWidth',2.2); %Freezing line; plotted last so that it will have the final legend item
+freeze = plot(freezingx,freezingy,'Color','k','LineWidth',2.2); %Freezing line; plotted last so that it will have the final legend item
 
 if length(launchname)==2
-    leg = legend([TvZ freeze],launchname{1},launchname{2},'Freezing');
+    leg = legend([TvZ TTwvZ(2) freeze],launchname{1},launchname{2},[launchname{2} ' (wetbulb)'],'Freezing'); %THIS IS CURRENTLY HARD CODED AND WILL NOT WORK EXCEPT FOR THE MAR 14 1972 12 CASE
 elseif length(launchname)==3
     leg = legend([TvZ freeze],launchname{1},launchname{2},launchname{3},'Freezing');
 end
 set(leg,'FontName','Lato'); set(leg,'FontSize',12)
 
-% fig = gcf;
-% set(fig,'PaperUnits','inches','PaperPosition',[0 0 9 9]) %1920x1004
-% print(fig,'-dpng','-r400')
+fig = gcf;
+set(fig,'PaperUnits','inches','PaperPosition',[0 0 20 10.46]) %1920x1004
+dateStringFilename = datestr(datenum(composite.(fields{sc})(foundit(sc)).valid_date_num(1),composite.(fields{sc})(foundit(sc)).valid_date_num(2),composite.(fields{sc})(foundit(sc)).valid_date_num(3),composite.(fields{sc})(foundit(sc)).valid_date_num(4),0,0),'mmmddyyyyHH');
+print(fig,[dateStringFilename '.png'],'-dpng')
 
+%close all
 end
