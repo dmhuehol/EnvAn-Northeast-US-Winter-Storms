@@ -32,7 +32,7 @@
     %Laboratory, AIRS II, and Other Field Studies. J. Atmos. Sci., 66,
     %2888–2899, https://doi.org/10.1175/2009JAS2883.1
     %
-    %Version date: 9/04/2018
+    %Version date: 1/22/2019
     %Last major revision: 9/04/2018
     %Written by: Daniel Hueholt
     %North Carolina State University
@@ -182,7 +182,7 @@ leg.Location = 'northwest';
 leg.FontSize = 16;
 xlim([-70 0])
 ylim([0 0.6])
-t = title('T-s habit diagram adapted from Bailey and Hallett 2009');
+t = title('T-s ice growth diagram adapted from Bailey and Hallett 2009');
 t.FontSize = 20;
 xLab = xlabel(['Temperature in ' char(176) 'C']);
 xLab.FontName = 'Lato Bold';
@@ -281,7 +281,59 @@ leg.Location = 'northeast';
 leg.FontSize = 16;
 ylim([-70 0])
 xlim([0 0.6])
-t = title('s-T habit diagram adapted from Bailey and Hallett 2009');
+t = title('s-T ice growth diagram adapted from Bailey and Hallett 2009');
+t.FontSize = 20;
+yLab = ylabel(['Temperature in ' char(176) 'C']);
+yLab.FontName = 'Lato Bold';
+xLab = xlabel('Supersaturation with respect to ice (%)');
+xLab.FontName = 'Lato Bold';
+axe.YTick = [-70 -60 -50 -40 -30 -22 -20 -18 -16 -14 -12 -10 -8 -6 -4 -2 0];
+axe.XTick = [0 0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.5 0.55 0.6];
+xTickLabels = {'0' '5' '10' '15' '20' '25' '30' '35' '40' '45' '50' '55' '60'}; % YOU NEED TO ACTUALLY CHANGE THIS OVER TO %
+xticklabels(xTickLabels);
+axe.Layer = 'top'; %Forces tick marks to be displayed over the patch objects
+axe.YDir = 'reverse';
+
+%% Make s-T diagram, lines only
+fig = figure;
+leftColor = [0 0 0]; rightColor = [0 0 0];
+set(fig,'defaultAxesColorOrder',[leftColor;rightColor])
+
+%Settings were defined earlier
+hold on
+eswSupersatLineStandard = plot(eswLine,TlineStandardC);
+eswSupersatLineStandard.Color = [255 230 0]./255;
+eswSupersatLineStandard.LineWidth = 3.2; 
+
+hold on
+%Approximate maximum supersaturation line
+maxVentLine = plot(2*eswLine,TlineStandardC);
+maxVentLine.Color = [0 26 255]./255;
+maxVentLine.LineWidth = 3.2;
+
+% Diagram settings
+axe = gca;
+axe.FontName = 'Lato';
+axe.FontSize = 18;
+yyaxis right
+axe.YTick = [0 2 4 6 8 10 12 14 16 18 20 22 30 40 50 60 70];
+%z = [2300 2625 2925 3225 3550 3850 4150 4475 4775 5075 5400 5700 6925 8450 10000 71750 76750];
+%z = z-2300; %Height above freezing line
+zLabels = {'0' '325' '625' '925' '1250' '1550' '1850' '2175' '2475' '2775' '3100' '3400' '4625' '6150' '7700' '69450' '74450'}; %meters
+yticklabels(zLabels);
+ylim([0 70])
+axe.Layer = 'top';
+yLab = ylabel('Height above freezing level in m (ICAO standard atmosphere)');
+yLab.FontName = 'Lato Bold';
+
+yyaxis left
+%leg = legend([plates columnlike variousplates sectorplates1 dendrites polycrystalsP1 polycrystalsC1 mixed1 eswSupersatLineStandard],{hd.Plates.Habit,hd.ColumnLike.Habit,hd.VariousPlates.Habit,hd.SectorPlates.Habit,hd.Dendrites.Habit,hd.PolycrystalsP.Habit,hd.PolycrystalsC.Habit,hd.Mixed.Habit,'Water saturation line (T_{ice} = T_{air})'});
+leg = legend([eswSupersatLineStandard maxVentLine],{'Water saturation line (T_{ice} = T_{air})','Approximate max natural supersaturation (with ventilation)'});
+leg.Location = 'northeast';
+leg.FontSize = 16;
+ylim([-70 0])
+xlim([0 0.6])
+t = title('s-T ice growth diagram adapted from Bailey and Hallett 2009');
 t.FontSize = 20;
 yLab = ylabel(['Temperature in ' char(176) 'C']);
 yLab.FontName = 'Lato Bold';
