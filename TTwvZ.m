@@ -170,7 +170,7 @@ else %But sometimes the moisture data cuts off early
 end
 maxLim = max(useTemp);
 xlim([minLim-1 maxLim+1])
-xlim([-12,5])
+%xlim([-12,5])
 %Max air temperature will always be greater than max wetbulb temperature:
 %Either both have been recorded, in which case air temperature is always
 %greater than wetbulb by definition, or air temperature stopped recording,
