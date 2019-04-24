@@ -1,4 +1,30 @@
-%function [] = growthParameterSpace(sounding)
+function [] = growthDiagram(sounding,timeIndex,legLog)
+%%growthDiagram
+    %Function to plot balloon temperature/humidity data on the ice growth
+    %diagram.
+    %
+    %General form: growthDiagram(sounding,timeIndex,legLog)
+    %
+    %Inputs
+    %sounding: a processed sounding data structure, must include moisture data
+    %timeIndex: the index of the desired sounding within the structure
+    %legLog: logical 1/0 to plot/not plot the rather giant legend. Enabled by default.
+    %
+    %Written by: Daniel Hueholt
+    %North Carolina State University
+    %Undergraduate Research Assistant at Environment Analytics
+    %Version date: 4/17/2019
+    %Last major revision: 4/17/2019
+    %
+
+if ~exist('legLog','var')
+    legLog = 1;
+    disp('Legend enabled by default')
+end
+if legLog~=0 && legLog~=1
+    legLog = 1;
+    disp('Legend enabled by default')
+end
 
 %% Setup for growth space
 %%Constants
@@ -19,59 +45,70 @@ esw_sp = es0*exp(Lvap/Rv*(1/273.15-1./T_sp)); %Saturated vapor pressure with res
 esi_sp = es0*exp(Lsub/Rv*(1/273.15-1./T_sp)); %Saturated vapor pressure with respect to ice
 
 %%Set up structure with information to plot habit diagram
-% All temperatures in deg C
-% All supersaturations with respect to ice
+% All temperatures in deg C, all supersaturations with respect to ice
 hd = struct('Plates',''); %Structure must have at least one field in order to assign elements using dot notation
+
 hd.Plates.Habit = 'Edge growth (plate-like)'; %'Plates';
 hd.Plates.Color = [243 139 156]./255;
 hd.Plates.TempBounds = [0 0 -4 -4];
 hd.Plates.supersatBounds = [0 0.1 0.1 0];
+
 hd.ColumnLike.Habit = 'Face growth (column-like)'; %'Column-like';
 hd.ColumnLike.Color = [165 162 221]./255;
 hd.ColumnLike.TempBounds = [-4 -4 -8 -8];
 hd.ColumnLike.supersatBounds = [0 0.28 0.28 0];
+
 hd.VariousPlates.Habit = 'Edge growth (various plates)'; %'Various plates';
 hd.VariousPlates.Color = hd.Plates.Color;
 hd.VariousPlates.TempBounds = [-8 -8 -22 -22];
 hd.VariousPlates.supersatBounds = [0 (esw_vp(1)-esi_vp(1))/esi_vp(1) (esw_vp(2)-esi_vp(2))/esi_vp(2) 0];
+
 hd.SectorPlates.Habit = 'Corner growth (sector plates)'; %'Sector plates';
 hd.SectorPlates.Color =  [218 146 56]./255;
 hd.SectorPlates.TempBounds = [-8 -8 -12.2 -12.2; -12.2 -12.2 -17.6 -17.6; -17.6 -17.6 -22 -22];
-hd.SectorPlates.supersatBounds = [(esw_sp(1)-esi_sp(1))/esi_sp(1) 0.36 0.36 (esw_sp(4)-esi_sp(4))/esi_sp(4); (esw_sp(2)-esi_sp(2))/esi_sp(2) 0.15 0.21 (esw_sp(5)-esi_sp(5))/esi_sp(5); (esw_sp(3)-esi_sp(3))/esi_sp(3) 0.46 0.46 (esw_sp(6)-esi_sp(6))/esi_sp(6)];
+hd.SectorPlates.supersatBounds = [(esw_sp(1)-esi_sp(1))/esi_sp(1) 0.36 0.36 (esw_sp(4)-esi_sp(4))/esi_sp(4); (esw_sp(2)-esi_sp(2))/esi_sp(2) 0.15 0.21 (esw_sp(5)-esi_sp(5))/esi_sp(5); (esw_sp(3)-esi_sp(3))/esi_sp(3) 0.6 0.6 (esw_sp(6)-esi_sp(6))/esi_sp(6)];
+
 hd.Dendrites.Habit = 'Corner growth (branched, dendrites)'; %'Dendrites';
 hd.Dendrites.Color = [247 214 153]./255;
 hd.Dendrites.TempBounds = [-12.7 -12.7 -17.1 -17.1];
 hd.Dendrites.supersatBounds = [0.16 0.43 0.43 0.21];
+
 hd.PolycrystalsP.Habit = 'Polycrystals (platelike)';
-hd.PolycrystalsP.Color = [63 1 22]./255;
+hd.PolycrystalsP.Color = [89 25 42]./255; %[63 1 22]./255;
 hd.PolycrystalsP.TempBounds = [-46.6 -40.2 -22 -22; -40.2 -40.2 -22 -22];
 hd.PolycrystalsP.supersatBounds = [0.038 0.33 0.33 0.038; 0.33 0.6 0.6 0.33];
+
 hd.PolycrystalsC.Habit = 'Polycrystals (columnar)';
-hd.PolycrystalsC.Color = [15 73 91]./255;
+hd.PolycrystalsC.Color = [0 54 70]./255;
 hd.PolycrystalsC.TempBounds = [-46.6 -40.2 -70 -70; -70 -70 -40.2 -40.2];
 hd.PolycrystalsC.supersatBounds = [0.038 0.33 0.33 0.038; 0.33 0.6 0.6 0.33];
+
 hd.Mixed.Habit = 'Mixed (polycrystals, plates, columns, equiaxed)';
 hd.Mixed.Color = [143 111 73]./255;
 hd.Mixed.TempBounds = [-8 -8 -70 -70; -46.6 -45.9 -70 -70];
 hd.Mixed.supersatBounds = [0 0.038 0.038 0; 0.038 0.0697 0.0697 0.038 ];
+
 hd.PolycrystalsIntermediate.Habit = 'Possible extension of the bullet rosette habit';
 hd.PolycrystalsIntermediate.Color = [hd.PolycrystalsP.Color; hd.PolycrystalsP.Color]; %Not shown on current diagram
 hd.PolycrystalsIntermediate.TempBounds = [-40.2 -40.2 -36.5 -36.5];
 hd.PolycrystalsIntermediate.supersatBounds = [0.359 0.491 0.445 0.316];
+
 hd.unnatural.Habit = 'Coordinates to block out unnatural supersaturations'; %Follows the 2*water saturation line
 hd.unnatural.Color = [1 1 1];
 hd.unnatural.TempBounds = [0 -7.5 -14 -18.5 -24.8 0];
 hd.unnatural.supersatBounds = [0 0.1549 0.3068 0.4231 0.6 0.6];
-hd.subsaturated.Habit = 'Coordinates to cover subsaturated area, for better radiosonde data plotting.';
-hd.subsaturated.Color = [255 242 209]./255;
-hd.subsaturated.TempBounds = [0 0 -70 -70];
-hd.subsaturated.supersatBounds = [];
-hd.warm.Habit = 'Coordinates to cover an area that is warmer than freezing, for better radiosonde data plotting.';
-hd.warm.Color = [204 204 204]./255;
-hd.warm.TempBounds = [15 15 0 0];
-hd.warm.supersatBounds = [0,0.6 0.6 0];
 
-%%Make s-T diagram
+hd.subsaturated.Habit = 'Coordinates to cover subsaturated area, for better radiosonde data plotting.';
+hd.subsaturated.Color = [204 204 204]./255;
+hd.subsaturated.TempBounds = [0 0 -70 -70];
+hd.subsaturated.supersatBounds = [-0.2 0 0 -0.2];
+
+hd.warm.Habit = 'Coordinates to cover an area that is warmer than freezing, for better radiosonde data plotting.';
+hd.warm.Color = [255,255,255]./255; %[204 204 204]./255;
+hd.warm.TempBounds = [15 15 0 0];
+hd.warm.supersatBounds = [0 0.6 0.6 0];
+
+%Make s-T diagram
 fig = figure;
 leftColor = [0 0 0]; rightColor = [0 0 0];
 set(fig,'defaultAxesColorOrder',[leftColor;rightColor])
@@ -117,6 +154,8 @@ mixed2 = patch(hd.Mixed.supersatBounds(2,:),hd.Mixed.TempBounds(2,:),hd.Mixed.Co
 mixed2.EdgeColor = 'none';
 warmerThanFreezing = patch(hd.warm.supersatBounds(1,:),hd.warm.TempBounds(1,:),hd.warm.Color);
 warmerThanFreezing.EdgeColor = 'none';
+subsaturated = patch(hd.subsaturated.supersatBounds(1,:),hd.subsaturated.TempBounds(1,:),hd.subsaturated.Color);
+subsaturated.EdgeColor = 'none';
 
 hold on
 TlineStandardC = 15:-0.1:-70;
@@ -127,13 +166,47 @@ eswLine = eswStandard./esiStandard-1;
 hold on
 eswSupersatLineStandard = plot(eswLine,TlineStandardC);
 eswSupersatLineStandard.Color = [255 230 0]./255;
-eswSupersatLineStandard.LineWidth = 3.2; 
+eswSupersatLineStandard.LineWidth = 3.2;
 hold on
+
+eswStandard90 = 0.9*eswStandard;
+eswLine90 = eswStandard90./esiStandard-1;
+eswSupersatLineStandard90 = plot(eswLine90,TlineStandardC);
+eswSupersatLineStandard90.LineStyle = '--';
+eswSupersatLineStandard90.Color = [255/255 230/255 0 0.8];
+eswSupersatLineStandard90.LineWidth = 3.2;
+hold on
+eswStandard80 = 0.8*eswStandard;
+eswLine80 = eswStandard80./esiStandard-1;
+eswSupersatLineStandard80 = plot(eswLine80,TlineStandardC);
+eswSupersatLineStandard80.LineStyle = ':';
+eswSupersatLineStandard80.Color = [255/255 230/255 0 0.8];
+eswSupersatLineStandard80.LineWidth = 3.2;
+hold on
+eswStandardp25 = 1.025*eswStandard;
+eswLinep25 = eswStandardp25./esiStandard-1;
+eswSupersatLineStandardp25 = plot(eswLinep25(151:end),TlineStandardC(151:end));
+eswSupersatLineStandardp25.LineStyle = '-.';
+eswSupersatLineStandardp25.Color = [255/255 230/255 0 0.8];
+eswSupersatLineStandardp25.LineWidth = 3.2;
+eswStandardp5 = 1.05*eswStandard;
+eswLinep5 = eswStandardp5./esiStandard-1;
+eswSupersatLineStandardp5 = plot(eswLinep5(151:end),TlineStandardC(151:end));
+%eswSupersatLineStandardp5.LineStyle = '-';
+eswSupersatLineStandardp5.Marker = '.';
+eswSupersatLineStandardp5.Color = [255/255 230/255 0 0.8];
+%eswSupersatLineStandardp5.LineWidth = 3.2;
+
+
 unnatural = patch(hd.unnatural.supersatBounds,hd.unnatural.TempBounds,hd.unnatural.Color);
 unnatural.EdgeColor = 'none';
 hold on
+TlineFreezing = plot([-20,100],[0,0]);
+TlineFreezing.LineWidth = 3.2;
+TlineFreezing.Color = [255 0 255]./255;
+hold on
 %Approximate maximum supersaturation line
-maxVentLine = plot(2*eswLine,TlineStandardC);
+maxVentLine = plot(2*eswLine(151:end),TlineStandardC(151:end));
 maxVentLine.Color = [0 26 255]./255;
 maxVentLine.LineWidth = 3.2;
 
@@ -152,12 +225,18 @@ axe.Layer = 'top';
 yLab = ylabel('Height above freezing level in m (ICAO standard atmosphere)');
 yLab.FontName = 'Lato Bold';
 yyaxis left
-leg = legend([plates columnlike sectorplates1 dendrites polycrystalsP1 polycrystalsC1 mixed1 warmerThanFreezing eswSupersatLineStandard maxVentLine],{hd.Plates.Habit,hd.ColumnLike.Habit,hd.SectorPlates.Habit,hd.Dendrites.Habit,hd.PolycrystalsP.Habit,hd.PolycrystalsC.Habit,hd.Mixed.Habit,'Melting','Water saturation line (T_{ice} = T_{air})','Approximate max natural supersaturation (with ventilation)'});
-leg.Location = 'northeast';
-leg.FontSize = 14;
+
 ylim([-70 8])
-xlim([0 0.6])
-t = title('s-T ice growth diagram adapted from Bailey and Hallett 2009');
+xlim([-0.1 0.6])
+if length(timeIndex)==1
+    dateString = datestr(datenum(sounding(timeIndex).valid_date_num(1),sounding(timeIndex).valid_date_num(2),sounding(timeIndex).valid_date_num(3),sounding(timeIndex).valid_date_num(4),0,0),'mmm dd, yyyy HH UTC'); %For title
+    [launchname] = stationLookupIGRAv2(sounding(timeIndex).stationID);
+else
+    dateString = 'December 2017';
+    launchname = 'Salt Lake City, UT';
+end
+t = title({['Ice phase space for ' dateString],launchname});
+t.FontName = 'Lato Bold';
 t.FontSize = 20;
 yLab = ylabel(['Temperature in ' char(176) 'C']);
 yLab.FontName = 'Lato Bold';
@@ -171,33 +250,37 @@ axe.Layer = 'top'; %Forces tick marks to be displayed over the patch objects
 axe.YDir = 'reverse';
 
 %% Plot T,s points on the parameter space defined by the ice growth diagram
-% 
-%%temporary, for testing
-timeIndex = 17081;
-sounding = upton;
 
+for c = 1:length(timeIndex)
+    loopTime = timeIndex(c);
+    rhumPercent = [sounding(loopTime).rhum];
+    rhumDecimal = rhumPercent./100;
+    radiosondeTemp = [sounding(loopTime).temp];
+    radiosondeTempK = radiosondeTemp+273.15;
+    %radiosondeHeight = [sounding(loopTime).geopotential]; %Will be used for eventual implementation of color-coding for height
+    
+    eswStandardFromRadiosonde = es0*exp(Lvap/Rv*(1/273.15-1./radiosondeTempK)); %Saturated vapor pressure with respect to water
+    esiStandardFromRadiosonde = es0*exp(Lsub/Rv*(1/273.15-1./radiosondeTempK)); %Saturated vapor pressure with respect to ice
+    soundingHumidityPoints = rhumDecimal.*eswStandardFromRadiosonde./esiStandardFromRadiosonde-1;
+    [s_max] = updraftSupersat(1000,1,1);
+    s_maxUsable = 1+s_max;
+    updraftMaxSupersat = s_maxUsable.*eswStandard;
+    updraftMaxSupersatPoints = updraftMaxSupersat./esiStandard-1;
+    lineSupersat = plot(updraftMaxSupersatPoints,TlineStandardC);
+    lineSupersat.LineWidth = 2;
+    
+    hold on
+    pointCloud = scatter(soundingHumidityPoints,radiosondeTemp,'filled','MarkerEdgeColor','k','MarkerFaceColor','w');
+    %Plot color like for lowest 8 km or something? Divide for different
+    %kilometers and use Okabe Ito?
+end
 
-rhumPercent = [sounding(timeIndex).rhum];
-rhumDecimal = rhumPercent./100;
-temp = [sounding(timeIndex).temp];
-[tempSorted, toSort] = sort(temp);
-TlineStandardC
-minTemp = min(temp);
-maxTemp = 
-%eswStandard(tempSorted);
-% 
-% 
-% [~,antiSortIndices] = sort(toSort);
-% tempUnsort = tempSorted(antiSortIndices);
-% 
-% relativeIceSat = rhumDecimal.*eswStandard(25)./esiStandard(25)-1;
-% disp(relativeIceSat)
-% s = plot(relativeIceSat,T,'Marker','o','MarkerSize',5,'MarkerEdgeColor','k','MarkerFaceColor','k');
-% s.Annotation.LegendInformation.IconDisplayStyle = 'off';
+leg = legend([plates columnlike sectorplates1 dendrites polycrystalsP1 polycrystalsC1 mixed1 subsaturated eswSupersatLineStandard eswSupersatLineStandard80 eswSupersatLineStandard90 eswSupersatLineStandardp25 eswSupersatLineStandardp5 maxVentLine pointCloud lineSupersat],{hd.Plates.Habit,hd.ColumnLike.Habit,hd.SectorPlates.Habit,hd.Dendrites.Habit,hd.PolycrystalsP.Habit,hd.PolycrystalsC.Habit,hd.Mixed.Habit,'Subsaturated','Water saturation line (T_{ice} = T_{air})','80% water saturation','90% water saturation','1.025 water saturation','1.05 water saturation','Approximate max natural supersat (with ventilation)','Balloon data','Guesstimated max updraft supersat'});
+%leg = legend([plates columnlike sectorplates1 dendrites polycrystalsP1 polycrystalsC1 mixed1 warmerThanFreezing eswSupersatLineStandard maxVentLine cloudLine],{hd.Plates.Habit,hd.ColumnLike.Habit,hd.SectorPlates.Habit,hd.Dendrites.Habit,hd.PolycrystalsP.Habit,hd.PolycrystalsC.Habit,hd.Mixed.Habit,'Melting','Water saturation line (T_{ice} = T_{air})','Approximate max natural supersat (with ventilation)','Balloon data'});
+leg.Location = 'northeast';
+leg.FontSize = 12;
+if legLog==0
+    leg.Visible = 'off';
+end
 
-
-
-
-
-
-%end
+end

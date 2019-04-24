@@ -16,7 +16,7 @@
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
-    %Version date: 6/22/2018
+    %Version date: 4/9/2019
     %Last major revision: 6/22/2018
     %
     %See also IGRAimpf, levfilter
@@ -39,5 +39,10 @@ switch type
         for scnt = 1:length(sounding)
             [dew(scnt).dewpt] = dewFromRH(sounding(scnt).temp,sounding(scnt).rhum); %dewrelh calculates dewpoint and relative humidity from dewpoint depression and temperature
         end
+    otherwise
+        msg = 'Invalid input! Check type input and try again.';
+        error(msg)
 %Calculation will return NaN if temperature and/or dewpoint depression are NaNs.
+end
+
 end
