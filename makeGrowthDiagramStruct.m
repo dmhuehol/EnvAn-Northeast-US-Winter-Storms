@@ -18,11 +18,11 @@ function [hd] = makeGrowthDiagramStruct(crystalLog,otherLog)
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
-    %Version date: 4/24/2019
-    %Last major revision: 
+    %Version date: 4/26/2019
+    %Last major revision: 4/24/2019 
     %
 
-
+%% Variable Checks
 if ~exist('crystalLog','var')
     disp('Growth info included by default')
     crystalLog=1;
@@ -40,9 +40,28 @@ if otherLog~=1 && otherLog~=0
     error(msg);
 end
 
+%% Setup
 hd = struct('Plates',''); %Structure must have at least one field in order to assign elements using dot notation
 
+%%Constants
+hd.Constants.Lsub = 2.834*10^6; %J/(kg)
+hd.Constants.Lvap = 2.501*10^6; %J/Kg
+hd.Constants.Rv = 461.5; %J/(kgK)
+hd.Constants.es0 = 611; %Pa
+
+%% Make the structure
 if crystalLog==1
+    % "Various plates" habit
+    T_vp = [-8 -22];
+    T_vp = T_vp + 273.15;
+    esw_vp = hd.Constants.es0*exp(hd.Constants.Lvap/hd.Constants.Rv*(1/273.15-1./T_vp)); %Saturated vapor pressure with respect to water
+    esi_vp = hd.Constants.es0*exp(hd.Constants.Lsub/hd.Constants.Rv*(1/273.15-1./T_vp)); %Saturated vapor pressure with respect to ice
+    % "Sector plates" habit
+    T_sp = [-8 -12.2; -12.2 -17.6; -17.6 -22];
+    T_sp = T_sp + 273.15;
+    esw_sp = hd.Constants.es0*exp(hd.Constants.Lvap/hd.Constants.Rv*(1/273.15-1./T_sp)); %Saturated vapor pressure with respect to water
+    esi_sp = hd.Constants.es0*exp(hd.Constants.Lsub/hd.Constants.Rv*(1/273.15-1./T_sp)); %Saturated vapor pressure with respect to ice
+    
     hd.Plates.Habit = 'Edge growth (plate-like)'; %'Plates';
     hd.Plates.Color = [243 139 156]./255;
     hd.Plates.TempBounds = [0 0 -4 -4];
