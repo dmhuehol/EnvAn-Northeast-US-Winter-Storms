@@ -44,8 +44,8 @@ end
 hd = struct('Plates',''); %Structure must have at least one field in order to assign elements using dot notation
 
 %%Constants
-hd.Constants.Lsub = 2.834*10^6; %J/(kg)
-hd.Constants.Lvap = 2.501*10^6; %J/Kg
+hd.Constants.Lsub = 2.834*10^6; %J/(kgK)
+hd.Constants.Lvap = 2.501*10^6; %J/(kgK)
 hd.Constants.Rv = 461.5; %J/(kgK)
 hd.Constants.es0 = 611; %Pa
 

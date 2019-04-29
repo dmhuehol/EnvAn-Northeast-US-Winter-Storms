@@ -1,4 +1,8 @@
 %%habitDiagram
+    %NOTE: this diagram and software are now deprecated. See
+    %iceGrowthDiagram for the current version. This script is kept as a
+    %historical monument, and should not be used for other reasons.
+    %
     %Script to generate a habit diagram using boundaries from Bailey and
     %Hallett 2009. The boundaries are then used to construct a new habit
     %diagram.
@@ -32,11 +36,13 @@
     %Laboratory, AIRS II, and Other Field Studies. J. Atmos. Sci., 66,
     %2888–2899, https://doi.org/10.1175/2009JAS2883.1
     %
-    %Version date: 1/22/2019
+    %Version date: 4/29/2019
     %Last major revision: 9/04/2018
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
+    %
+    %See also iceGrowthDiagram, makeGrowthDiagramStruct
     %
 
 %% Constants
