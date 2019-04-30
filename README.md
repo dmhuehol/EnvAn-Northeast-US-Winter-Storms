@@ -50,6 +50,8 @@ habitDiagramLegacy: Legacy script to plot Bailey-Hallett 2009 habit diagram. Sup
 
 iceGrowthDiagram: Function to plot the s-T ice growth diagram with various viewing options (i.e. include isohumes, updraft guesstimation, ventilation supersaturation lin, etc.)
 
+iceSupersatToRH: Convert an ice supersaturation to a relative humidity.
+
 importIGRAv1: Creates a structure of soundings data from raw Integrated Global Radiosonde Archive v1 .dat data. Renamed from IGRAimpf on 3 June 2018. (Based on part of a script originally written by Megan Amanatides.)
 
 importIGRAv2: Imports IGRA v2 sounding data files into a MATLAB data structure. Updated 25 June 2018 to fix spelling errors in the function help. Updated 28 June 2018 to import station ID as well.
@@ -69,6 +71,8 @@ precipfilterASOS: Filters a soundings data structure by whether precipitation wa
 prestogeo: Calculates geopotential height given pressure and temperature. Includes a variety of bonus options which make it easier to use with other functions; for a bare-bones geopotential height calculator, see simple_prestogeo. Equation comes from Durre and Yin (2008) http://journals.ametsoc.org/doi/pdf/10.1175/2008BAMS2603.1 
 
 rangebardemo: Demonstration of the “stacked” and “patch" methods to make ranged bar charts.
+
+rhow: Calculate excess vapor density with respect to ice for a given humidity and temperature.
 
 rhumplot: Generate a figure with charts of relative humidity vs pressure and relative humidity vs height from input sounding number and sounding data structure.
 
