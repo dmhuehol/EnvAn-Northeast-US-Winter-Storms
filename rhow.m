@@ -1,5 +1,5 @@
 function [rhoDiff] = rhow(percent,T)
-%%eswLine
+%%rhow
     %Calculates vapor density for a given RH percent and T
     %
     %General form: [rhoDiff] = rhow(percent,T)
@@ -24,11 +24,16 @@ Lvap = 2.501*10^6; %J/Kg
 Rv = 461.5; %J/(kgK)
 es0 = 611; %Pa
 
-percent = percent/100;
+if percent>1
+    percent = percent/100;
+else
+    %do nothing
+end
 
 Tk = T+273.15;
 eswStandard = es0*exp(Lvap/Rv*(1/273.15-(1./Tk))); %Saturated vapor pressure with respect to water
 esiStandard = es0*exp(Lsub/Rv*(1/273.15-(1./Tk))); %Saturated vapor pressure with respect to ice
+
 eswPercent = eswStandard.*percent;
 
 %plot(Tk-273,eswStandard./100);

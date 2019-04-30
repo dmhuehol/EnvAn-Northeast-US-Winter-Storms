@@ -2,13 +2,13 @@ function [RH] = iceSupersatToRH(iceSupersat,T)
 %%iceSupersatToRH
     %Converts ice supersaturation in decimal to RH in percent
     %
-    %
+    %General form: [RH] = iceSupersatToRH(iceSupersat,T)
     %
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
     %Version date: 4/30/2019
-    %Last major revision: 
+    %Last major revision: 4/30/2019
     %
     %See also rhow
     %
@@ -21,7 +21,7 @@ es0 = 611; %Pa
 Tk = T+273.15;
 eswStandard = es0*exp(Lvap/Rv*(1/273.15-1./Tk)); %Saturated vapor pressure with respect to water
 esiStandard = es0*exp(Lsub/Rv*(1/273.15-1./Tk)); %Saturated vapor pressure with respect to ice
-esiStandard = esiStandard./100;
+%esiStandard = esiStandard./100;
 
 esw = esiStandard.*(iceSupersat+1);
 
