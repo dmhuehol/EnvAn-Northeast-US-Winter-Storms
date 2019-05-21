@@ -114,7 +114,7 @@ TvZcomparison: Plots a composite temperature and wind vs height figure for multi
 
 TwindvZ: Plots temperature and wind vs height for an input time. Requires windbarb. windbarb function was written by Laura Tomkins (github @lauratomkins). Updated 23 July 2018 with repair for issue where windbarbs would be plotted in the wrong place if the T-span was set by user instead of being generated dynamically.
 
-updraftSupersat: Calculates the guesstimated maximum possible supersaturation inside an updraft. Uses some magic parameters and updraft speed as an input. Based on the equation from MEA412 at NC State, which allegedly comes from Hodges 1967 but I've never actually been able to find it in that paper.
+updraftSupersat: Calculates the guesstimated maximum possible supersaturation inside an updraft. Uses some magic parameters and updraft speed as an input. Based on the equation from MEA412 at NC State, which is derived from Twomey 1959.
 
 usefulColorSchemes: A script containing some useful color schemes.
 
