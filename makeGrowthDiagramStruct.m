@@ -1,16 +1,18 @@
 function [hd] = makeGrowthDiagramStruct(crystalLog,otherLog)
 %%makeGrowthDiagramStruct
     %Function to make a structure containing all information needed to plot
-    %a growth diagram. Data comes from Bailey and Hallett 2009.
+    %a growth diagram. Values derived from Bailey and Hallett 2009.
+    %
+    %General form: [hd] = makeGrowthDiagramStruct(crystalLog,otherLog)
     %
     %Output
-    %hd: a structure containing habit title, colors, temperature bounds,
+    %hd: a structure containing name, plot colors, temperature bounds,
     %and ice supersaturation bounds for all habits
     %
     %Inputs
-    %crystalLog: logical 1/0 whether or not to contain info for crystal habits
-    %otherLog: logical 1/0 whether or not to include info for other
-    %parameters, like a subsaturated zone or warmer than freezing zone
+    %crystalLog: logical 1/0 whether or not to contain info for crystal habits, defaults to 1
+    %otherLog: logical 1/0 whether or not to include info for other parameters 
+    %   (e.g. subsaturated areas, unnatural supersaturations), defaults to 1 
     %
     %Might be nice to eventually have temperature/supersat as an input here and only
     %include habits that appear in that temperature range?
@@ -18,8 +20,8 @@ function [hd] = makeGrowthDiagramStruct(crystalLog,otherLog)
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
-    %Version date: 4/26/2019
-    %Last major revision: 4/24/2019 
+    %Version date: 5/21/2019
+    %Last major revision: 5/21/2019 
     %
 
 %% Variable Checks
@@ -43,7 +45,7 @@ end
 %% Setup
 hd = struct('Plates',''); %Structure must have at least one field in order to assign elements using dot notation
 
-%%Constants
+% Constants
 hd.Constants.Lsub = 2.834*10^6; %J/(kgK)
 hd.Constants.Lvap = 2.501*10^6; %J/(kgK)
 hd.Constants.Rv = 461.5; %J/(kgK)

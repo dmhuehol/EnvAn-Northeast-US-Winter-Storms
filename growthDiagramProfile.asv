@@ -16,8 +16,8 @@ function [] = growthDiagramProfile(sounding,timeIndex,legLog,dateString)
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
-    %Version date: 5/3/2019
-    %Last major revision: 5/3/2019
+    %Version date: 4/26/2019
+    %Last major revision: 4/26/2019
     %
     %See also makeGrowthDiagramStruct, iceGrowthDiagram, eswLine
     %
@@ -46,7 +46,7 @@ if length(timeIndex)==1
 else
     % Manually generate title otherwise
     %dateString = 'DJF 2015-2016';
-    launchname = 'Barrow, AK';
+    launchname = 'Hilo, HI';
 end
 t = title({['Ice phase space for ' dateString],launchname});
 t.FontName = 'Lato Bold';
@@ -62,10 +62,10 @@ for c = 1:length(timeIndex)
     radiosondeHeight3 = radiosondeHeight<=6000 & radiosondeHeight>4000;
     radiosondeHeight4 = radiosondeHeight<=8000 & radiosondeHeight>6000;
     radiosondeHeight5 = radiosondeHeight<=10000 & radiosondeHeight>8000;
-    %radiosondeHeight6 = radiosondeHeight<=12000 & radiosondeHeight>10000;
+    radiosondeHeight6 = radiosondeHeight<=12000 & radiosondeHeight>10000;
     %radiosondeHeight7 = radiosondeHeight<=12000 & radiosondeHeight>6000;
     %radiosondeHeight8 = radiosondeHeight<8000 & radiosondeHeight>7000;
-    radiosondeHeightRest = radiosondeHeight>10000;
+    radiosondeHeightRest = radiosondeHeight>12000;
     
     rhumDecimal = [sounding(loopTime).rhum]./100; %Need humidity in decimal to plot balloon data
     radiosondeTemp = [sounding(loopTime).temp]; %Celsius for plotting
@@ -90,7 +90,7 @@ for c = 1:length(timeIndex)
     pc2 = scatter(shp2,radiosondeTemp(radiosondeHeight2),'filled','MarkerEdgeColor',[0 114 178]./255,'MarkerFaceColor',[0 114 178]./255);
     pc3 = scatter(shp3,radiosondeTemp(radiosondeHeight3),'filled','MarkerEdgeColor',[86 180 233]./255,'MarkerFaceColor',[86 180 233]./255);
     pc4 = scatter(shp4,radiosondeTemp(radiosondeHeight4),'filled','MarkerEdgeColor',[0 158 115]./255,'MarkerFaceColor',[0 158 115]./255);
-    pc5 = scatter(shp5,radiosondeTemp(radiosondeHeight5),'filled','MarkerEdgeColor',[0 0 0]./255,'MarkerFaceColor',[0 0 0]./255);
+    pc5 = scatter(shp5,radiosondeTemp(radiosondeHeight5),'filled','MarkerEdgeColor',[0 0 167]./255,'MarkerFaceColor',[204 121 167]./255);
     %pc6 = scatter(shp6,radiosondeTemp(radiosondeHeight6),'filled','MarkerEdgeColor',[213 94 0]./255,'MarkerFaceColor',[213 94 0]./255);
     %pc7 = scatter(shp7,radiosondeTemp(radiosondeHeight7),'filled','MarkerEdgeColor',[204 121 167]./255,'MarkerFaceColor',[204 121 167]./255);
     %pc8 = scatter(shp8,radiosondeTemp(radiosondeHeight8),'filled','MarkerEdgeColor',[0 0 0],'MarkerFaceColor',[0 0 0]);
@@ -117,7 +117,7 @@ legendEntries(end+1) = pcRest;
 legendText{end+1} = 'Balloon data: >10 km';
 leg = legend(legendEntries,legendText);
 leg.Location = 'southeast';
-leg.FontSize = 10;
+leg.FontSize = 12;
 if legLog==0
     leg.Visible = 'off';
 end

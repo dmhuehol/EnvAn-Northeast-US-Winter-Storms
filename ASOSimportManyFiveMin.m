@@ -7,7 +7,7 @@
     %off as their own structures.
     %
     %General form:
-    %   [usefulStruct,ASOSstruct] = ASOSimportManyFiveMin(filelist)
+    %   [usefulStruct,ASOSstruct] = ASOSimportManyFiveMin(filelist,stations)
     %
     %Outputs:
     %usefulMasterStruct: structure containing entries for year, month, day, hour,
@@ -24,8 +24,8 @@
     %   magnetic variable wind, and remarks.
     %
     %Inputs:
-    %filelist: list of names referring to ASOS five minute data files.
-    %stations: list of all station codes that have files in the file list.
+    %filelist: cell array list of names referring to ASOS five minute data files.
+    %stations: cell array list of all station codes that have files in the file list.
     %
     %To download an ASOS data file from the NCDC FTP server
     %using MATLAB, see ASOSdownloadFiveMin. To download an ASOS data file
@@ -44,7 +44,8 @@
     %Links to useful ASOS documentation can be found in the
     %EnvAn-WN-Phase-2 repository readme on github user page @dmhuehol.
     %
-    %Version date: 6/11/2018
+    %Version date: 5/3/2019
+    %Last major revision: 6/11/2018
     %Written by: Daniel Hueholt
     %Undergraduate Research Assistant at Environment Analytics
     %North Carolina State University

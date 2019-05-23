@@ -31,8 +31,8 @@ function [soundingsWithPrecip,soundingsSansPrecip] = precipfilterASOS(soundStruc
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
-    %Version Date: 5/3/2019
-    %Last Major Revision: 5/3/2019
+    %Version Date: 6/26/2018
+    %Last Major Revision: 6/26/2018
     %
     %See also ASOSimportFiveMin, ASOSimportManyFiveMin, fullIGRAimp, ASOSgrabber
     %
@@ -55,8 +55,6 @@ asosDates2 = permute(asosDates3,[3,2,1]); %Reorder to be a 2D matrix with column
 
 [~,validSoundingNumbers,validASOSind] = intersect(soundingDates2,asosDates2,'rows'); %The function only needs the valid ASOS indices, but the first and second output ~ are valid dates and valid sounding number, respectively
 subset = soundStruct(validSoundingNumbers);
-% Something is going wrong here in Barrow - lots of soundings are being cut
-% by intersect not matching the soundings to the ASOS.
 
 grab = 12; %+/- 1 hour by default
 %Note that large values of grab can cause some soundings to be lost near the
@@ -64,7 +62,7 @@ grab = 12; %+/- 1 hour by default
 %ASOS data structure. If the sum of sansPrecip soundings and withPrecip
 %soundings is not close to the original structure, try using a smaller grab.
 
-problemCodes = {'FG','BR','HZ','BLSN','FZFG'}; %These codes do not indicate precipitation
+problemCodes = {'FG','BR','HZ','BLSN'}; %These codes do not indicate precipitation
 
 if specific == 1 %If we look for precipitation only at times exactly corresponding to the soundings time
     validASOSextract = asosStruct(validASOSind);
@@ -87,20 +85,12 @@ if specific == 1 %If we look for precipitation only at times exactly correspondi
     blowsnow = strfind(precipCodes,problemCodes{4});
     noBlowsnow = cellfun('isempty',blowsnow);
     blowsnow(noBlowsnow) = {0};
-    blowsnow = cell2mat(blowsnow); %Make double
-    blowsnow(blowsnow~=1) = 0;
-    freezefog = strfind(precipCodes,problemCodes{5});
-    noFreezefog = cellfun('isempty',freezefog);
-    freezefog(noFreezefog) = {0};
-    freezefog = cell2mat(freezefog); %Make double
-    freezefog(freezefog~=1) = 0;
+    blowsnow = cell2mat(blowsnow); %Mak
     
     logicalPrecip = logical(~cellfun('isempty',precipCodes)); %Logically index on isempty weather code
     logicalPrecip(fog==1) = 0; %Fog indices are now 0
     logicalPrecip(mist==1) = 0; %Mist indices are now 0
     logicalPrecip(haze==1) = 0; %Haze indices are now 0
-    logicalPrecip(blowsnow==1) = 0; %Blowsnow indices are now 0
-    logicalPrecip(freezefog==1) = 0; %Freezing fog indices are now 0
     %At this point, logical 1 should refer only to times with true precipitation
     
     withPrecip = logicalPrecip==1;
@@ -140,23 +130,11 @@ else
     haze(noHaze) = {0};
     haze = cell2mat(haze); %Make double
     haze(haze~=1) = 0;
-    blowsnow = strfind(precipCodes,problemCodes{4});
-    noBlowsnow = cellfun('isempty',blowsnow);
-    blowsnow(noBlowsnow) = {0};
-    blowsnow = cell2mat(blowsnow); %Make double
-    blowsnow(blowsnow~=1) = 0;
-    freezefog = strfind(precipCodes,problemCodes{5});
-    noFreezefog = cellfun('isempty',freezefog);
-    freezefog(noFreezefog) = {0};
-    freezefog = cell2mat(freezefog); %Make double
-    freezefog(freezefog~=1) = 0;
     
     logicalPrecip = logical(~cellfun('isempty',precipCodes)); %Logically index on isempty weather code
     logicalPrecip(fog==1) = 0; %Fog codes are now 0
     logicalPrecip(mist==1) = 0; %Mist codes are now 0
     logicalPrecip(haze==1) = 0; %Haze codes are now 0
-    logicalPrecip(blowsnow==1) = 0; %Blowsnow indices are now 0
-    logicalPrecip(freezefog==1) = 0; %Freezing fog indices are now 0
     %At this point, logical 1 should refer only to times with precip
     
     logPrecipAndInd = [logicalPrecip' refInd]; %refInd refers to sounding numbers, but still has multiple entries for each
