@@ -1,4 +1,4 @@
-function [] = growthDiagramProfile(sounding,timeIndex,legLog,dateString)
+function [] = growthDiagramProfile(sounding,timeIndex,legLog)
 %%growthDiagramProfile
     %Function to plot a balloon temperature/humidity profile on the ice growth
     %diagram.
@@ -45,8 +45,8 @@ if length(timeIndex)==1
     [launchname] = stationLookupIGRAv2(sounding(timeIndex).stationID);
 else
     % Manually generate title otherwise
-    %dateString = 'DJF 2015-2016';
-    launchname = 'Barrow, AK';
+    dateString = 'unknown';
+    launchname = 'unknown';
 end
 t = title({['Ice phase space for ' dateString],launchname});
 t.FontName = 'Lato Bold';
