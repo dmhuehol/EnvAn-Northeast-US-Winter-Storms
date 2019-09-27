@@ -7,29 +7,27 @@ function [wetSound,errorTracker] = addWetbulb(sounding)
     %
     %Output
     %wetSound: sounding structure with calculated wetbulb temperature
-    %field, otherwise identical to input structure
     %errorTracker: array containing the indices of soundings that
     %encountered errors in the wetbulb calculation
     %
     %Input
     %sounding: sounding structure that must already contain dewpoint
-    %data--be sure to run dewrelh or a similar program before running this.
     %
     %For IGRA processing: works best if level 3 data has been filtered out.
     %Otherwise, wetbulb field will have a different size then other fields,
-    %which complicating any further analysis.
+    %complicating any further analysis.
     %
     %This function is spectacularly slow thanks to the nested for loops
-    %and numerical algebraic evaluation; it is usually best to run on the smallest
+    %and numerical algebraic evaluation. It's sually best to run on the smallest
     %dataset possible, after all other filtration has been applied.
     %
-    %Version date: 4/7/2018
+    %Version date: 9/27/2019
     %Last major revision: 3/18/2018
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
     %
-    %See also IGRAimpf, levfilter, wetbulb
+    %See also wetbulb
     %
 
 wetSound = sounding;
