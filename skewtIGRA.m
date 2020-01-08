@@ -9,15 +9,10 @@
     %sounding index for a particular date).
     %soundStruct: a soundings data structure
     %
-    %Note that the isotherms plotted are relative to, but NOT the same as the
-    %labels on the x-axis. The x labels refer to the imaginary isotherms
-    %passing through the tip of their tick marks. The magenta line is the
-    %0C isotherm, not the black isotherm closest to the 0C tick mark.
-    %
     %Adapted from code found on MIT Open Courseware, ocw.mit.edu
     %Written by: Daniel Hueholt
-    %Version date: 6/06/2018
-    %Last major revision: 6/06/2018
+    %Version date: 1/8/2020
+    %Last major revision: 1/8/2020
     %
     %See also skewT, TvZ, soundplots, findsnd, fullIGRAimp
     %
@@ -34,12 +29,12 @@ tdz=243.5.*chi./(17.67-chi); %calculate dew
 
 p=1050:-25:100; %Construct values for the pressure axis
 pplot=p';
-t0=-48:2:50; %Construct values for the temperature axis
+t0=-50:2:50; %Construct values for the temperature axis
 ps = length(p);
 ts = length(t0);
-for i=1:ts,
-   for j=1:ps,
-      tem(i,j)=t0(i)+30.*log(0.001.*p(j)); %This will draw temperature lines
+for i=1:ts
+   for j=1:ps
+      tem(i,j)=t0(i)+30.*log(0.001.*p(j)); %Used wherever temperature is needed
       thet(i,j)=(273.15+tem(i,j)).*(1000./p(j)).^.287; %dry adiabats
       es=6.112.*exp(17.67.*tem(i,j)./(243.5+tem(i,j)));
       q(i,j)=622.*es./(p(j)-es); %isohumes
@@ -53,11 +48,10 @@ theta=thet';
 thetae=thetaea';
 qs=sqrt(q)';
 figure;
-contour(t0,pplot,temp,16,'k'); %Adds isotherms and isobars
 hold on
 set(gca,'yscale','log','ydir','reverse') %pressure decreases with height
 set(gca,'ytick',100:100:1000)
-set(gca,'ygrid','on')
+set(gca,'ygrid','on') %Adds isobars
 set(gca,'FontName','Lato Bold')
 hold on
 contour(t0,pplot,theta,24,'b'); %dry adiabats
@@ -65,20 +59,20 @@ contour(t0,pplot,qs,24,'g'); %isohumes
 contour(t0,pplot,thetae,24,'r'); %moist adiabats
 %tsound=30.+43.5.*log(0.001.*p);
 %tsoundm=tsound-30.*log(0.001.*p);
-tzm=tz-30.*log(0.001.*pz); %Skew the temperature
-tdzm=tdz-30.*log(0.001.*pz); %Skew the dewpoint
-h=plot(tzm,pz,'k',tdzm,pz,'k--'); %Plot temperature and dewpoint
+tzm=tz-30.*log(0.001.*pz); %Skew observed temperature
+tdzm=tdz-30.*log(0.001.*pz); %Skew observed dewpoint
+h=plot(tzm,pz,'k',tdzm,pz,'k--'); %Plot observed temperature and dewpoint
 set(h,'linewidth',2)
 
-%Construct a 0C isotherm to for easier interpretation
-freezingLine = NaN(length(tzm'),1); %make a new column vector to be plotted
-freezingLine(:) = 0; %this is where the 0C line appears on the graph
-%Yes, you could accomplish the same thing with zeros(length(tzm'),1)
-%instead of NaN, but this makes it clearer that this same approach can be
-%used to construct any new isotherms.
-temp0m = freezingLine-30.*log(0.001.*pz); %Skew the freezing line
-h2 = plot(temp0m,pz,'m'); %plot in magenta
-set(h2,'linewidth',2.3)
+temps = -100:10:40; %Isotherm temperatures
+tempNull = NaN(length(tzm'),length(temps)); %Each column will be an isotherm
+for col = 1:length(temps)
+    tempNull(:,col) = temps(col); %Populate NaN matrix with isotherm values
+end
+tempLines = tempNull-30.*log(0.001.*pz); %Apply skew
+isotherms = plot(tempLines,pz,'Color','k','LineWidth',1); %Plot isotherms in black
+zeroInd = find(temps==0); %Find the 0C isotherm
+isotherms(zeroInd).Color = 'm'; %#ok %Plot the 0C isotherm in magenta! Suppress code analyzer warning because it doesn't apply here.
 
 hold off
 xlabel('Temperature (C)','FontName','Lato Bold')
@@ -87,5 +81,7 @@ dateString = num2str(soundStruct(snum).valid_date_num); %Used in title
 t = title(['Sounding for ' dateString]);
 set(t,'FontName','Lato Bold')
 set(t,'FontSize',16)
+xlim([-40,40])
+ylim([100,1000])
 
 end
