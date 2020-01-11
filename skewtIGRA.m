@@ -64,6 +64,25 @@ tdzm=tdz-30.*log(0.001.*pz); %Skew observed dewpoint
 h=plot(tzm,pz,'k',tdzm,pz,'k--'); %Plot observed temperature and dewpoint
 set(h,'linewidth',2)
 
+
+
+%[frosts] = frostpoint(tz,tdz);
+frosts = NaN(length(tdz),1);
+frostErrors = 0;
+for c = 1:length(tdz)
+    try
+        [frosts(c)] = frostpoint(tdz(c));
+    catch ME %#ok
+        frostErrors = frostErrors+1;
+        %do nothing
+    end
+end
+disp('The following number of errors occurred during frostpoint calculation: ')
+disp(frostErrors)
+
+frostsSkew = frosts-30.*log(0.001.*pz);
+plot(frostsSkew,pz,'Color','c','LineWidth',3);
+
 temps = -100:10:40; %Isotherm temperatures
 tempNull = NaN(length(tzm'),length(temps)); %Each column will be an isotherm
 for col = 1:length(temps)
@@ -82,6 +101,6 @@ t = title(['Sounding for ' dateString]);
 set(t,'FontName','Lato Bold')
 set(t,'FontSize',16)
 xlim([-40,40])
-ylim([100,1000])
+ylim([100,1013])
 
 end
