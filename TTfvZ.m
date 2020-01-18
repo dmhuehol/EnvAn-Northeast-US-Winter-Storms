@@ -1,12 +1,12 @@
-%%TTwvZ
-    %Function to plot the height profile of temperature and wetbulb temperature
-    %given an input date and soundings structure. Additionally, allows for
-    %user control of the maximum height plotted.
+%%TTfvZ
+    %Function to plot the height profile of temperature and frostpoint
+    %temperature given an input date and soundings structure. Additionally,
+    %allows for user control of the maximum height plotted.
     %
-    %General form: [foundit] = TTwvZ(y,m,d,t,sounding,kmTop)
+    %General form: [foundit] = TTfvZ(y,m,d,t,sounding,kmTop)
     %
     %Output
-    %foundit: the index of the sounding corresponding to the time
+    %foundit: the index of the sounding corresponding to the input time
     %
     %Inputs
     %y: four digit year
@@ -17,8 +17,8 @@
     %kmTop: OPTIONAL INPUT maximum km to plot. Defaults to 13km melting
     %layers at Long Island are always within 5km of surface.    %
     %
-    %Version Date: 8/15/2018
-    %Last major revision: 8/15/2018
+    %Version Date: 1/17/2020
+    %Last major revision: 1/17/2020
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
@@ -46,11 +46,10 @@ end
 kmTop = round(kmTop); %Fractional kilometers are not allowed
 
 r = length(sounding); %Find the number of soundings
-
 dateString = cell(1,r);
 for as = 1:r %Loop through everything
     dateString{as} = sounding(as).valid_date_num;
-    if isequal(dateString{as},[y,m,d,t])==1 %Look for the requested date
+    if isequal(dateString{as},[y,m,d,t]) %Look for the requested date
         foundit = as; %here it is!
         indexMsg = 'Index in structure is ';
         disp([indexMsg num2str(foundit)])
@@ -69,35 +68,30 @@ end
 kmCutoff = logical(sounding(foundit).calculated_height <= kmTop+1); %Find indices of readings where the height less than the maximum height requested, plus a bit for better plotting
 useTemp = sounding(foundit).temp(kmCutoff==1);
 useHeight = sounding(foundit).calculated_height(kmCutoff==1);
-if isfield(sounding,'wetbulb')==1 %Check if structure already has wetbulb temperature
-    useWet = sounding(foundit).wetbulb(kmCutoff==1);
-else %If it doesn't, then calculate wetbulb for just this sounding
-    disp('Calculating frostpoint profile, please wait.');
-    usePressure = sounding(foundit).pressure(kmCutoff==1);
-    usePressure = usePressure./100; %Pressure must be in hPa for wetbulb calculation
-    useDew = sounding(foundit).dewpt(kmCutoff==1); %Needed for wetbulb calculation
-    useWet = NaN(length(useDew),1);
-    for c = 1:length(useTemp)
-        try
-            [useWet(c)] = frostpoint(useDew(c));
-        catch ME %#ok
-            %do nothing
-            %errors in frostpoint calculation will be dealt with later
-        end
+disp('Calculating frostpoint profile, please wait.');
+useDew = sounding(foundit).dewpt(kmCutoff==1); %Needed for wetbulb calculation
+useFrost = NaN(length(useDew),1);
+frostError = 0;
+for c = 1:length(useTemp)
+    try
+        [useFrost(c)] = frostpoint(useDew(c));
+    catch ME %#ok
+        frostError = frostError+1;
     end
 end
-useWet = double(useWet); %Certain operations will not function while the data type is symbolic
+disp(['Frostpoint calculation failed ' num2str(frostError) ' times on ' num2str(length(useTemp)) ' calculations (' num2str(frostError./length(useTemp)) '% failure rate)'])
+useFrost = double(useFrost); %Certain operations will not function while the data type is symbolic
 
 % Extra quality control to prevent jumps in the graphs
 useHeight(useHeight<-150) = NaN;
 useHeight(useHeight>100) = NaN;
 useTemp(useTemp<-150) = NaN;
 useTemp(useTemp>100) = NaN;
-if all(isnan(useWet)==1)
+if all(isnan(useFrost)==1) %#ok Code Analyzer is wrong about behavior here
     disp('Frostpoint calculation failed! Frostpoint profile will not be displayed.')
 else
-    useWet(useWet<-150) = NaN;
-    useWet(useWet>100) = NaN;
+    useFrost(useFrost<-150) = NaN;
+    useFrost(useFrost>100) = NaN;
 end
 sounding(foundit).temp(sounding(foundit).temp<-150) = NaN;
 
@@ -113,7 +107,7 @@ plot(freezingx,freezingy,'Color',[0 0 0],'LineWidth',2) %Freezing line
 hold on
 plot(useDew,useHeight,'Color',[64 224 208]./255,'LineWidth',2.4);
 hold on
-plot(useWet,useHeight,'Color',[128 0 255]./255,'LineWidth',2.4); %TwvZ
+plot(useFrost,useHeight,'Color',[128 0 255]./255,'LineWidth',2.4); %TwvZ
 
 % Plot settings
 limits = [0 kmTop];
@@ -165,18 +159,13 @@ xLab.FontName = 'Lato Bold'; xLab.FontSize = 16;
 yLab = ylabel('Height in km');
 yLab.FontName = 'Lato Bold'; yLab.FontSize = 16;
 
-if min(useWet)<min(useTemp) %Wetbulb is always less than air temperature
-    minLim = min(useWet);
-else %But sometimes the moisture data cuts off early
+if min(useFrost)<min(useTemp) %Frostpoint is usually less than air temperature
+    minLim = min(useFrost);
+else %But sometimes the moisture data cuts off early, and we still need to assign a minimum dynamically
     minLim = min(useTemp);
 end
 maxLim = max(useTemp);
 xlim([minLim-1 maxLim+1])
-%xlim([-12,5])
-%Max air temperature will always be greater than max wetbulb temperature:
-%Either both have been recorded, in which case air temperature is always
-%greater than wetbulb by definition, or air temperature stopped recording,
-%in which case the wetbulb cannot be calculated anyway.
     
 % Common settings for making poster graphics from Long Island
 %set(ax,'XTick',[-30 -15 -10 -6 -4 -3 -2 -1 0 1 2 3 4 6 10 15])
